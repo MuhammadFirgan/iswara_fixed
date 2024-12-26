@@ -100,7 +100,7 @@ export default function page() {
                     label="Status"
                     placeholder="Pilih status"
                 >
-                    {roles?.map((role: string) => (
+                    {roles?.map((role: any) => (
 
                         <SelectItem key={role?._id} value={role?._id} className="bg-zinc-900 border-none text-white">{role?.name === 'admin' ? 'Operator' : 'Guru'}</SelectItem>
                     ))}
