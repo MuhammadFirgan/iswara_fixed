@@ -44,7 +44,7 @@ export default async function page() {
                 <TableCell >{user?.nip}</TableCell>
                 <TableCell>{ user?.role.name === "admin" ? 'Operator' : 'Guru' }</TableCell>
                 <TableCell className="flex gap-2 justify-end">
-                  <EditModal user={user as updateUserProps} />
+                  <EditModal user={user} />
                   <Badge variant="destructive">Hapus</Badge>
                 </TableCell>
               </TableRow>

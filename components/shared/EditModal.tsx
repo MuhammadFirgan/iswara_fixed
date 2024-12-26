@@ -22,7 +22,7 @@ import { updateUser } from "@/lib/actions/user.action"
 import { useRouter } from "next/navigation"
 import { updateUserProps } from '@/types';
 
-export default function EditModal(user: updateUserProps) {
+export default function EditModal({ user } : { user: updateUserProps}) {
 
     const router = useRouter()
      const [ roles, setRoles ] = useState([])
@@ -118,9 +118,7 @@ export default function EditModal(user: updateUserProps) {
                     </form>
                 </Form>
             </>
-            {/* <DialogDescription>
-
-            </DialogDescription> */}
+            
         </DialogContent>
     </Dialog>
   )
