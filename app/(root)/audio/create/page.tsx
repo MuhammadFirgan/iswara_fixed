@@ -40,7 +40,7 @@ export default function page() {
         }
   return (
     <section className="px-10 pb-10 sm:max-w-3xl">
-        <h1 className="text-xl mb-10">Buat Audio </h1>
+        <h1 className="text-xl mb-10">Buat Audio Anda</h1>
         
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
