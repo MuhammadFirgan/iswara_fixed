@@ -4,10 +4,10 @@ import bcryptjs from 'bcryptjs'
 import { dbConnect } from "../database";
 import User, { IUser } from "../database/models/user.model";
 import Role from '../database/models/role.model';
-import { UploadFileProps, userProps } from '@/types';
+import { createUserProps, UploadFileProps, UserProps } from '@/types';
 
 
-export async function createUser(user: IUser) {
+export async function createUser(user: createUserProps) {
   try {
     await dbConnect();
 

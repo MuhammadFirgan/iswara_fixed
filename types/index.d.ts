@@ -1,10 +1,19 @@
 export interface UserProps {
     fullName: string
     email: string
-    username: string
+    nip: string
     role: string
     photo?: string
-  }
+}
+
+export interface createUserProps {
+    fullName: string
+    email: string
+    nip: string
+    role: string
+    photo?: string
+    password: string
+}
   
   export interface CardProps {
       image: string
