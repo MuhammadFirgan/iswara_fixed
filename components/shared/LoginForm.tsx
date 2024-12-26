@@ -15,10 +15,12 @@ import { useForm } from "react-hook-form"
 import CustomAlert from "./CustomAlert"
 import { useState } from "react"
 import { useRouter } from 'next/navigation'
+import Link from "next/link"
 
 export default function LoginForm() {
 
     const [message, setMessage] = useState<string | null>()
+    const [status, setStatus] = useState(0)
 
     const router = useRouter()
 
@@ -47,12 +49,13 @@ export default function LoginForm() {
         } else {
             router.push('/sign-in')
             setMessage(data.message)
+            setStatus(response.status)
         }
     }
 
  return (
-    <section className="flex flex-col gap-5">
-        {message && <CustomAlert message={message} />}
+    <section className="flex flex-col gap-5 w-full sm:max-w-xs">
+        {message && <CustomAlert message={message} status={status} />}
         <div className="bg-zinc-950 p-6">
             <h1 className="text-2xl text-center">Login <span className="text-primary">Iswara</span></h1>
             <span className="text-sm text-zinc-400 mt-3 mb-5 block text-center">Silahkan masuk</span>
@@ -77,6 +80,7 @@ export default function LoginForm() {
                     <Button type="submit" className="bg-primary w-full">Kirim</Button>
                 </form>
             </Form>
+            <Link href="/forgot_password" className="text-center text-sm block my-5 ">Lupa Password</Link>
         </div>
     </section>
   )

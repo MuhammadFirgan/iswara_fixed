@@ -1,5 +1,7 @@
-import CreateUserForm from "@/components/shared/CreateUser"
+
+import EditModal from "@/components/shared/EditModal"
 import { Badge } from "@/components/ui/badge"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import {
     Table,
     TableBody,
@@ -12,33 +14,36 @@ import {
 import { getAllUser } from "@/lib/actions/user.action"
 
 
+
 export default async function page() {
 
   const users = await getAllUser()
 
 
   return (
+    
     <section className="px-10">
-      <CreateUserForm />
+      
       <Table>
           <TableCaption>List User</TableCaption>
           <TableHeader>
               <TableRow>
               <TableHead>Nama</TableHead>
+              <TableHead>NIP</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Action</TableHead>
               </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map(user => (
+            {users?.map(user => (
 
-              <TableRow key={user._id}>
-                <TableCell className="line-clamp-1">{user.fullName}</TableCell>
-                <TableCell>{ user.role.name === "admin" ? 'Operator' : 'Guru' }</TableCell>
+              <TableRow key={user?._id}>
+                <TableCell className="line-clamp-1">{user?.fullName}</TableCell>
+                <TableCell >{user?.nip}</TableCell>
+                <TableCell>{ user?.role.name === "admin" ? 'Operator' : 'Guru' }</TableCell>
                 <TableCell className="flex gap-2 justify-end">
+                  <EditModal user={user} />
                   <Badge variant="destructive">Hapus</Badge>
-                  <Badge variant="warning">Ubah</Badge>
-
                 </TableCell>
               </TableRow>
             ))}

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 
+
 const MONGODB_URL = process.env.MONGODB_URL
 
 let cached = (global as any) || { conn: null, promise:null }
@@ -16,6 +17,7 @@ export const dbConnect = async () => {
     })
 
     cached.conn = await cached.promise
+
 
     return cached.conn
 }

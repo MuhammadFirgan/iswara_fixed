@@ -11,14 +11,14 @@ export interface IUser extends Document {
 }
 
 const UserSchema = new Schema({
-    fullName: { type: String, require: true },
-    email: { type: String, require: true, unique: true },
-    nip: { type: String, require: true, unique: true },
+    fullName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    nip: { type: String, required: true, unique: true },
     photo: { type: String },
     password: { type: String },
-    role: { type: Schema.ObjectId, ref: "role" }
+    role: { type: Schema.Types.ObjectId, ref: "Role" }
 })
 
-const User = models.user || model('user', UserSchema)
+const User = models.User || model('User', UserSchema)
 
 export default User

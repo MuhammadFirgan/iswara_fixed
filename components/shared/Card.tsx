@@ -11,7 +11,7 @@ export default function Card({ image }: CardProps) {
             <h3 className="line-clamp-2 pt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus libero, atque suscipit quo error ullam consequatur magni totam excepturi impedit.</h3>
         </Link>
         
-        <Link href="/profile" className="py-3 flex items-center gap-2">
+        <Link href="/album/muhammad_firgan" className="py-3 flex items-center gap-2">
             <Image src={image} width={27} height={27} alt="profile" className="rounded-full aspect-square" />
             <span className="text-sm text-gray-500">Muhammad Firgan</span>
         </Link>

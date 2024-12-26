@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .bg-primary {
-  @apply bg-[#007bff];
+  @apply bg-gradient-to-r from-green-600 to-green-800;
 }
 
 .text-primary {
-  @apply text-[#007bff];
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-800
 }

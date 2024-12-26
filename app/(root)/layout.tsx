@@ -4,7 +4,14 @@ import Search from "@/components/shared/Search";
 import Sidebar from "@/components/shared/Sidebar";
 import Topbar from "@/components/shared/Topbar";
 import { getToken } from "@/constans/getToken";
-import { getUserByRole } from "@/lib/actions/user.action";
+import { JwtPayload } from "jsonwebtoken";
+
+
+export type barProps = {
+  role: string
+  token: object | string
+  type: 'first' | 'second'
+}
 
 
 export default async function layout({
@@ -13,28 +20,23 @@ export default async function layout({
     children: React.ReactNode;
   }>) {
 
+    
     const tokenData = await getToken()
-    
-    const user = await getUserByRole(tokenData?.id)
-    const role = user?.role.name 
-    
-    
-    
+
+    const roleName = tokenData?.role
+
   return (
-    <main className="relative">
-      <div className="flex relative">
-        <div className='hidden lg:block relative '>
-          <Sidebar token={tokenData} role={role}/>
+    <main className="">
+      <div className="flex">
+        <div className='hidden lg:block fixed left-0 bottom-0 min-h-screen'>
+          <Sidebar token={tokenData} role={roleName} type='second'/>
         </div>
-        <section className='flex min-h-screen max-md:pb-14 flex-col relative z-500 w-full'>
+        <section className='flex min-h-screen max-md:pb-14 flex-col relative z-500 w-full sm:ml-[250px]'>
           <div className="flex w-full justify-between items-center gap-3 px-8 py-6">
             <Search />
-            {/* <div >
-            </div> */}
-
             <div className="flex items-center gap-3 relative">
               <div className="md:hidden">
-                <MobileNav token={tokenData} />
+                <MobileNav token={tokenData} role={roleName} type="second"/>
               </div>
               <Topbar />
             </div>

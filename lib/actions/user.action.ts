@@ -1,44 +1,29 @@
 'use server'
 
-import { redirect } from "next/navigation";
 import bcryptjs from 'bcryptjs'
 import { dbConnect } from "../database";
 import User, { IUser } from "../database/models/user.model";
-
+import Role from '../database/models/role.model';
+import { UploadFileProps, userProps } from '@/types';
 
 
 export async function createUser(user: IUser) {
-
   try {
-    await dbConnect()
-    const nip = user.nip
+    await dbConnect();
 
-    const findUser = await User.findOne({nip})
-    console.log(findUser)
-    
-    
-    const userExist = await User.findOne({nip: '210210204227'}).populate('role')
-    console.log(userExist)
-    
+    const salt = await bcryptjs.genSalt(12);
+    const hashedPassword = await bcryptjs.hash(user.password, salt);
 
-    if(userExist) throw new Error('Nip sudah terdaftar')
+    const newUser = await User.create({
+      ...user,
+      password: hashedPassword,
+    });
 
-    if (user.role.name === 'admin') {
-        const salt = await bcryptjs.genSalt(12)
-            
-        const hashedPassword = await bcryptjs.hash(user.password, salt)
-        const newUser = await User.create({...user, password: hashedPassword})
-        if (newUser) {
-          return redirect('/management')
-        }
-
-        return JSON.parse(JSON.stringify(newUser))
-    } else {
-        throw new Error('role tidak diijinkan')
-    }
+    return JSON.parse(JSON.stringify(newUser))
 
   } catch (error) {
-    console.log(error)
+    console.error(error);
+
   }
 }
 
@@ -46,8 +31,7 @@ export async function getAllUser() {
   try {
     await dbConnect()
 
-    const users = await User.find().populate('role')
-    
+    const users = await User.find().populate({ path: 'role', model: Role, select: 'name' })
 
     return JSON.parse(JSON.stringify(users))
   } catch (error) {
@@ -55,15 +39,67 @@ export async function getAllUser() {
   }
 }
 
-export async function getUserByRole(id: string) {
-  
+export async function getUserById(id: string) {
   try {
     await dbConnect()
-    const user = await User.findOne({_id: id}).populate('role')
 
-    return JSON.parse(JSON.stringify(user))
-    
+    const userById = await User.findOne({_id: id})
+    return JSON.parse(JSON.stringify(userById))
   } catch (error) {
     console.log(error)
+  }
+}
+
+export async function getUserExist(nip: string, email: string) {
+  try {
+    await dbConnect()
+
+    const userExist = await User.findOne({
+      $or: [{ email }, { nip }]  
+    })
+
+    return JSON.parse(JSON.stringify(userExist))
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+export async function uploadImageUser({ id, url }: UploadFileProps) {
+  try {
+    await dbConnect()
+
+    const uploadImage = await User.findOneAndUpdate({
+      _id: id,
+      photo: url
+    })
+
+    return JSON.parse(JSON.stringify(uploadImage))
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function updateUser({id, user}: { id: string, user: UserProps }) {
+ 
+
+  const { fullName, email, role } = user
+  try {
+    await dbConnect()
+
+    const updateUser = await User.findOneAndUpdate({
+      _id: id,
+      fullName,
+      email,
+      role
+    })
+
+    if (!updateUser) throw new Error('User update failed')
+    return JSON.parse(JSON.stringify(updateUser))
+
+  } catch(e) {
+    console.log(e)
   }
 }

@@ -4,13 +4,14 @@ import User from "@/lib/database/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import Role from "@/lib/database/models/role.model";
 
 export async function POST(req: NextRequest) {
     try {
         await dbConnect()
         const { nip, password } = await req.json(); 
         
-        const user = await User.findOne({nip})
+        const user = await User.findOne({nip}).populate({ path: 'role', model: Role, select: 'name' })
         
     
         if (!user) {
@@ -26,10 +27,11 @@ export async function POST(req: NextRequest) {
 
         const tokenData = {
           id: user._id,
-          fullName: user.fullName
+          fullName: user.fullName,
+          role: user?.role.name
         }
 
-        const token = await jwt.sign(tokenData, process.env.JWT_SECRETKEY, { expiresIn: '900' })
+        const token = await jwt.sign(tokenData, process.env.JWT_SECRETKEY!, { expiresIn: '900' })
 
         const response = NextResponse.json({ success: true, message: 'Login berhasil!', user: { nip: user.nip, fullName: user.fullName } },
           { status: 200 })

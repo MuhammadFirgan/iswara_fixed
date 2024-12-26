@@ -20,16 +20,18 @@ export interface CustomFormProps {
     name: string
     label?: string
     placeholder?: string
+    value?: string
     children?: React.ReactNode
 }
 
 
 export default function CustomForm(props: CustomFormProps) {
-    const { name, control } = props
+    const { name, control, value } = props
   return (
     <FormField
         control={control}
         name={name}
+        value={value}
         render={({ field }) => (
         <FormItem>
             

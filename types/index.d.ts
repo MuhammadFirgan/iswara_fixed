@@ -1,5 +1,5 @@
 export interface UserProps {
-    firstName: string
+    fullName: string
     email: string
     username: string
     role: string
@@ -16,6 +16,19 @@ export interface UserProps {
   export type loginProps = {
     nip: string
     password: string
+  }
+
+  export type UploadFileProps = {
+    id: string,
+    url: string
+  }
+
+  export type audioProps = {
+    title: string
+    description?: string
+    voiceType: string
+    prompt: string
+    thumbnail?: string
   }
 
  

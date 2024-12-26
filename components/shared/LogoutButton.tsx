@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "../ui/button";
 import { useRouter } from 'next/navigation'
 
@@ -17,6 +18,7 @@ export default function LogoutButton() {
 
       if (response.ok) {
         router.push('/')
+        router.refresh()
       } 
     } catch (error) {
       console.log(error)
