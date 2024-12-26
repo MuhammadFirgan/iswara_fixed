@@ -31,7 +31,6 @@ export default function CustomForm(props: CustomFormProps) {
     <FormField
         control={control}
         name={name}
-        value={value}
         render={({ field }) => (
         <FormItem>
             
