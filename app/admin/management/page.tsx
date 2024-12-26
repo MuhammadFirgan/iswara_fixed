@@ -35,7 +35,7 @@ export default async function page() {
               </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.map(user => (
+            {users?.map((user: any) => (
 
               <TableRow key={user?._id}>
                 <TableCell className="line-clamp-1">{user?.fullName}</TableCell>
