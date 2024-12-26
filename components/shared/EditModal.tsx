@@ -20,11 +20,12 @@ import { useEffect, useState } from "react"
 import { getRole } from "@/lib/actions/role.action"
 import { updateUser } from "@/lib/actions/user.action"
 import { useRouter } from "next/navigation"
+import { UserProps } from '@/types';
 
-export default function EditModal({ user }: { user: object }) {
+export default function EditModal(user: UserProps) {
 
     const router = useRouter()
-     const [ roles, setRoles ] = useState(null)
+     const [ roles, setRoles ] = useState([])
      useEffect(() => {
         const setRole = async () => {
             const response = await getRole()
@@ -40,6 +41,7 @@ export default function EditModal({ user }: { user: object }) {
             ...updateUserValidation,
             fullName: "",
             email: "",
+            nip: "",
             role: ""
         },
     })
@@ -49,7 +51,8 @@ export default function EditModal({ user }: { user: object }) {
             form.reset({
                 fullName: user.fullName,
                 email: user.email,
-                role: user.role?._id 
+                nip: user.nip,
+                role: user.role._id 
             })
         }
     }, [user, form])
@@ -81,7 +84,7 @@ export default function EditModal({ user }: { user: object }) {
                             name="fullName"
                             label="Nama Lengkap"
                             placeholder="Nama Lengkap.."
-                            value="halo"
+                       
                         />
                         <CustomForm 
                             control={form.control}
@@ -89,6 +92,13 @@ export default function EditModal({ user }: { user: object }) {
                             name="email"
                             label="Email"
                             placeholder="Email.."
+                        />
+                        <CustomForm 
+                            control={form.control}
+                            type={FieldType.INPUT}
+                            name="nip"
+                            label="Nip"
+                            placeholder="Nip.."
                         />
                         
                         <CustomForm 
@@ -98,7 +108,7 @@ export default function EditModal({ user }: { user: object }) {
                             label="Status"
                             placeholder="Pilih status"
                         >
-                            {roles?.map((role: string) => (
+                            {roles?.map((role: any) => (
 
                                 <SelectItem key={role?._id} value={role?._id} className="bg-zinc-900 border-none text-white">{role?.name === 'admin' ? 'Operator' : 'Guru'}</SelectItem>
                             ))}

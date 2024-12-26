@@ -1,8 +1,10 @@
 export interface UserProps {
+    [x: string]: string
+
     fullName: string
     email: string
     nip: string
-    role: string
+    role: array
     photo?: string
 }
 

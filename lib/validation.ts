@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getUserById } from "./actions/user.action";
+
 
 export const createFormValidation = z.object({
     'title': z
@@ -65,6 +65,9 @@ export const updateUserValidation = z.object({
     'fullName': z
         .string()
         .min(2, 'Nama terlalu pendek'),
+    'nip': z
+        .string()
+        .min(12, "Masukkan nip yang benar"),
     'email': z
         .string()
         .email()
