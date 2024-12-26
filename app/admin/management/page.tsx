@@ -12,6 +12,9 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import { getAllUser } from "@/lib/actions/user.action"
+import { User } from '@/lib/database/models/user.model';
+import { updateUserProps } from "@/types"
+
 
 
 
@@ -35,14 +38,14 @@ export default async function page() {
               </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.map((user: any) => (
+            {users?.map((user: updateUserProps) => (
 
               <TableRow key={user?._id}>
                 <TableCell className="line-clamp-1">{user?.fullName}</TableCell>
                 <TableCell >{user?.nip}</TableCell>
                 <TableCell>{ user?.role.name === "admin" ? 'Operator' : 'Guru' }</TableCell>
                 <TableCell className="flex gap-2 justify-end">
-                  <EditModal user={user} />
+                  <EditModal user={user as updateUserProps} />
                   <Badge variant="destructive">Hapus</Badge>
                 </TableCell>
               </TableRow>
