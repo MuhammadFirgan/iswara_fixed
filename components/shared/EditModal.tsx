@@ -20,9 +20,9 @@ import { useEffect, useState } from "react"
 import { getRole } from "@/lib/actions/role.action"
 import { updateUser } from "@/lib/actions/user.action"
 import { useRouter } from "next/navigation"
-import { UserProps } from '@/types';
+import { updateUserProps } from '@/types';
 
-export default function EditModal(user: UserProps) {
+export default function EditModal(user: updateUserProps) {
 
     const router = useRouter()
      const [ roles, setRoles ] = useState([])

@@ -1,11 +1,13 @@
 export interface UserProps {
     [x: string]: string
-
     fullName: string
     email: string
-    nip: string
     role: array
     photo?: string
+}
+
+export interface updateUserProps extends UserProps {
+  nip: string
 }
 
 export interface createUserProps {
