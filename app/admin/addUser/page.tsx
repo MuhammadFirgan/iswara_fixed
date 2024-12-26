@@ -18,7 +18,7 @@ import { z } from "zod"
 
 
 export default function page() {
-    const [ roles, setRoles ] = useState(null)
+    const [ roles, setRoles ] = useState([])
     const [ message, setMessage ] = useState("")
     const [ status, setStatus ] = useState(0)
 
