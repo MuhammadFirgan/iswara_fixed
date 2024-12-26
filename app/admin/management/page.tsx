@@ -12,7 +12,6 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import { getAllUser } from "@/lib/actions/user.action"
-import { User } from '@/lib/database/models/user.model';
 import { updateUserProps } from "@/types"
 
 
