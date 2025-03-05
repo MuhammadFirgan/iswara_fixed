@@ -11,7 +11,8 @@ export enum FieldType {
     SELECT = 'select',
     FILE = 'file',
     TEXTAREA = 'textarea',
-    PASSWORD = 'password'
+    PASSWORD = 'password',
+    UPLOAD = 'upload'
 }
 
 export interface CustomFormProps {

@@ -11,12 +11,12 @@ export const createFormValidation = z.object({
         .min(2, 'Deskripsi minimal 2 karakter')
         .max(400, 'Deskripsi terlalu panjang')
         .optional(),
-    'voiceType': z
+    'cloneAudio': z
+        .string(),
+    'voicePrompt': z
         .string()
-        .min(2, 'Pilih setidaknya 1 jenis suara'),
-    'prompt': z
-        .string()
-        .min(5, 'Tulis setidaknya 5 kata'),
+        .min(5, 'Tulis setidaknya 5 kata')
+        .max(1000, 'Prompt terlalu panjang, maksimal 1000 karakter'),
     'thumbnail': z
         .string()
         .optional()
@@ -74,5 +74,12 @@ export const updateUserValidation = z.object({
         .min(5, 'Email terlalu pendek'), 
     'role': z
         .string()
-    
+})
+
+export const cloneVoiceValidation = z.object({
+    'name': z
+        .string()
+        .min(2, 'Nama terlalu pendek'),
+    'audioClone': z
+        .string()
 })

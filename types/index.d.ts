@@ -39,9 +39,14 @@ export interface createUserProps {
   export type audioProps = {
     title: string
     description?: string
-    voiceType: string
-    prompt: string
+    cloneAudio: string
+    voicePrompt: string
     thumbnail?: string
+  }
+
+  export interface generateAudioProps {
+    voice: string
+    prompt: string
   }
 
  

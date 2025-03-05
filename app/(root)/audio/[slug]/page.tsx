@@ -1,7 +1,9 @@
+import PhoneRinging from "@/components/shared/PhoneRinging";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { BiHeadphone } from "react-icons/bi";
+
 
 
 export default function page({ params }: { params: Promise<{ slug: string }> }) {
@@ -22,7 +24,8 @@ export default function page({ params }: { params: Promise<{ slug: string }> }) 
             <h1 className="text-xl font-bold lg:text-4xl lg:max-w-xl">
               Teks Cerita | Kisah Kancil Dan Buaya
             </h1>
-            <Button className="max-w-sm bg-primary rounded-3xl w-full">Mainkan</Button>
+            
+            <PhoneRinging name="Pak Jokowi" avatar="" />
           </div>
         </div>
       </div>
@@ -37,7 +40,8 @@ export default function page({ params }: { params: Promise<{ slug: string }> }) 
               <h2 className="text-xl">Muhammad Firgan</h2>
             </Link>
             <div className="flex items-center gap-2">
-              <BiHeadphone className="text-zinc-600" />
+              <Image src="/icons/megaphone.svg" width={24} height={24} alt="audio" className="w-5 h-5" />
+              
               <span className="text-sm text-zinc-600">100 Audios</span>
             </div>
           </div>

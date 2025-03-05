@@ -31,3 +31,6 @@ export const voiceTypes = [
         as: "perempuan (22-26 tahun)"
     },
 ]
+
+export const userId = process.env.PLAYHT_USER_ID
+export const secretKey = process.env.PLAYHT_SECRET_KEY

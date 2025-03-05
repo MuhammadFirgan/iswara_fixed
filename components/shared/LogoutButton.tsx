@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import { Button } from "../ui/button";
 import { useRouter } from 'next/navigation'
 
@@ -26,9 +27,10 @@ export default function LogoutButton() {
   }
   
   return (
-    <Button onClick={() => fetchData()}>
-      Logout
-    </Button>
+    <div className="cursor-pointer flex items-center gap-4 px-5" onClick={() => fetchData()}>
+      <Image src="/icons/logout.svg" width={20} height={20} alt="icon"  />
+      <span>Logout</span>
+    </div>
 
   )
 }

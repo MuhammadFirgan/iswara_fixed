@@ -19,6 +19,7 @@ import Link from "next/link"
 
 export default function LoginForm() {
 
+    const [ isLoading, setIsLoading ] = useState(false)
     const [message, setMessage] = useState<string | null>()
     const [status, setStatus] = useState(0)
 
@@ -36,7 +37,7 @@ export default function LoginForm() {
     })
     
     async function onSubmit(values: z.infer<typeof loginFormValidation>) {
-       
+       setIsLoading(true)
         const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -51,6 +52,8 @@ export default function LoginForm() {
             setMessage(data.message)
             setStatus(response.status)
         }
+
+        setIsLoading(false)
     }
 
  return (
@@ -77,7 +80,13 @@ export default function LoginForm() {
                         label="Password"
                         placeholder="password..."
                     />
-                    <Button type="submit" className="bg-primary w-full">Kirim</Button>
+                    <Button 
+                            type="submit" 
+                            className={`bg-primary w-full ${isLoading ? 'bg-green-300 hover:cursor-not-allowed text-black' : ''}`}
+                            disabled={isLoading} 
+                        >
+                            {isLoading ? 'Memproses...' : 'Kirim'} 
+                        </Button>
                 </form>
             </Form>
             <Link href="/forgot_password" className="text-center text-sm block my-5 ">Lupa Password</Link>
