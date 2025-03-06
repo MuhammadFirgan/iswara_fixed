@@ -55,6 +55,34 @@ export async function getCloneAudio() {
     }
 }
 
-export async function deleteCloneAudio(fileUrl: string) {
+export async function deleteCloneAudio({ voiceUrl, voiceId }: { voiceUrl: string; voiceId: string }) {
+    try {
+        dbConnect()
 
+        const url = 'https://api.play.ht/api/v2/cloned-voices/';
+        const options = {
+            method: 'DELETE',
+            headers: {
+                accept: 'application/json', 
+                'content-type': 'application/json',
+                AUTHORIZATION: secretKey,
+                'X-USER-ID': userId
+            },
+            
+            body: JSON.stringify({voice_id: voiceUrl})
+        };
+
+        const response = await fetch(url, options)
+        const result = await response.json()
+
+        console.log(result)
+
+        const deleteAudio = await CloneAudio.deleteOne({ _id: voiceId  })
+
+        return JSON.parse(JSON.stringify(deleteAudio))
+
+        
+    } catch (error) {
+        console.error(error)
+    }
 }

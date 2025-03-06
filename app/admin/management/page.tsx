@@ -1,7 +1,6 @@
 
 import EditModal from "@/components/shared/EditModal"
 import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import {
     Table,
     TableBody,
@@ -25,7 +24,7 @@ export default async function page() {
   return (
     
     <section className="px-10">
-      
+      <h1 className="text-2xl mb-8">Daftar User Terdaftar</h1>
       <Table>
           <TableCaption>List User</TableCaption>
           <TableHeader>

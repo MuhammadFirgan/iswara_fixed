@@ -45,9 +45,11 @@ export default function MyModal({ isOpen, onClose }: ModalProps) {
 
     try {
       setIsSubmitting(true); 
-      await createCloneAudio({ name, myFile: file });
+      const cloneAudio = await createCloneAudio({ name, myFile: file });
+      if(cloneAudio) {
+        router.push('/audio/create')
+      } 
       onClose(); 
-      router.refresh(); 
     } catch (e) {
       console.error(e);
       setError("Gagal mengunggah file. Silakan coba lagi.");

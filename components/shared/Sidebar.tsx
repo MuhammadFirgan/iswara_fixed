@@ -33,9 +33,15 @@ export default function Sidebar({ role, token, type = "second" } : barProps) {
               </Link>
               <Link href="/admin/management" className={`flex items-center gap-3 px-5 py-2 ${isActive('/admin/management')} `}>
                   
-                  <svg className={`text-white fill-current border-none ${isActive('/admin/management')}`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" ><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"></path></svg>
-                  <p className="text-sm">Operator</p>
-                </Link>
+                <svg className={`text-white fill-current border-none ${isActive('/admin/management')}`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" ><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"></path></svg>
+                <p className="text-sm">Operator</p>
+              </Link>
+              <Link href="/admin/voice_clone_list" className={`flex items-center gap-3 px-5 py-2 ${isActive('/admin/voice_clone_list')} `}>
+                  
+            
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={`text-white fill-current border-none ${isActive('admin/voice_clone_list')}`}><path d="M12 16c2.206 0 4-1.794 4-4V6c0-2.217-1.785-4.021-3.979-4.021a.933.933 0 0 0-.209.025A4.006 4.006 0 0 0 8 6v6c0 2.206 1.794 4 4 4z"></path><path d="M11 19.931V22h2v-2.069c3.939-.495 7-3.858 7-7.931h-2c0 3.309-2.691 6-6 6s-6-2.691-6-6H4c0 4.072 3.061 7.436 7 7.931z"></path></svg>
+                <p className="text-sm">Clone List</p>
+              </Link>
               <Link href="/admin/addUser" className={`flex items-center gap-3 px-5 py-2  ${isActive('/admin/addUser')}`}>
                   <Image src="/icons/user.svg" width={24} height={24} alt="icon sidebar"  />
                   <p className="text-sm">Add User</p>
@@ -54,7 +60,6 @@ export default function Sidebar({ role, token, type = "second" } : barProps) {
                 
               </div>
               <Link href="/" className={`flex items-center gap-3 px-5 py-2  ${isActive('/')}`}>
-                {/* <Image src="/icons/home.svg" width={24} height={24} alt="icon sidebar" className="text-white" /> */}
                 <svg className={`text-white fill-current border-none ${isActive('/')}`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.74 2.32a1 1 0 0 0-1.48 0l-9 10A1 1 0 0 0 3 14h2v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7h2a1 1 0 0 0 1-1 1 1 0 0 0-.26-.68z"></path></svg>
                 <p className="text-sm">Beranda</p>
               </Link>

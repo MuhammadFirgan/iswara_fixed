@@ -64,7 +64,7 @@ export default function EditModal({ user } : { user: updateUserProps}) {
                 router.push('/admin/management')
             }
         } catch(e) {
-            console.log(e)
+            console.error(e)
         }
       
     }

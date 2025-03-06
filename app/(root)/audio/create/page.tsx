@@ -53,8 +53,10 @@ export default function page() {
 
     const getVoices = async () => {
         const voiceList = await getCloneAudio()
-        
+
         setCloneVoices(voiceList)
+        
+        
     }
     useEffect(() => {
 
