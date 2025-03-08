@@ -6,10 +6,10 @@ import Image from "next/image";
 import { Loader } from "lucide-react";
 
 interface UploadFileProps {
-  onFileUpload: (fileUrl: String) => void
+  onFieldChange: (fileUrl: String) => void
 }
 
-export default function FileUpload({ onFileUpload }: UploadFileProps) {
+export default function FileUpload({ onFieldChange }: UploadFileProps) {
   const [ files, setFiles ] = useState<File[]>([])
   const [ preview, setPreview ] = useState<String>("")
   const { startUpload, isUploading } = useUploadThing('imageUploader')
@@ -25,14 +25,14 @@ export default function FileUpload({ onFileUpload }: UploadFileProps) {
       const res = await startUpload(acceptedFiles)
       if(res?.length > 0) {
         setPreview(res[0].url)
-        onFileUpload(res[0].url)
+        onFieldChange(res[0].url)
       }
 
       console.log(res)
     } catch(e) {
       console.error(e)
     }
-  }, [startUpload, onFileUpload])
+  }, [startUpload, onFieldChange])
 
   const { getRootProps, getInputProps } = useDropzone({onDrop})
 

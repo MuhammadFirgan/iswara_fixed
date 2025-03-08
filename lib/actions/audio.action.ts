@@ -5,17 +5,29 @@ import { dbConnect } from "../database"
 import Audio from "../database/models/audio.model"
 import { randomUUID } from "crypto"
 import { getDuration } from "../utils"
-// import * as PlayHT from 'playht';
+import User from "../database/models/user.model"
 
-// PlayHT.init({
-//   apiKey: process.env.PLAYHT_SECRET_KEY,
-//   userId: process.env.PLAYHT_USER_ID,
-// });
+const getVoiceClone = () => {
 
+}
 
 
-export async function createAudio(value: audioProps) {
- 
+export async function createAudio({ audio, userid }: audioProps) {
+
+    try {
+        await dbConnect()
+
+        const findUser = User.findOne({_id: userid})
+
+        if(!findUser) throw new Error('User tidak ditemukan')
+
+        const newAudio = await Audio.create({...audio})
+
+        return JSON.parse(JSON.stringify(newAudio))
+
+    } catch (error) {
+        console.error(error)
+    }
     
       
 }
