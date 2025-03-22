@@ -14,9 +14,8 @@ import { useRouter } from 'next/navigation'
 import CloneAudio from "@/components/shared/CloneAudio"
 import FileUpload from "@/components/shared/FileUpload"
 
-export default function AudioForm({ userid }: { userid: string }) {
+export default function AudioForm({ userid }: { userid: any }) {
 
-   
 
     const [isSubmiting, setIsSubmiting] = useState(false)
     
