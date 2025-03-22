@@ -7,12 +7,10 @@ import { randomUUID } from "crypto"
 import { getDuration } from "../utils"
 import User from "../database/models/user.model"
 
-const getVoiceClone = () => {
-
-}
 
 
 export async function createAudio({ audio, userid }: audioProps) {
+
 
     try {
         await dbConnect()
@@ -21,7 +19,9 @@ export async function createAudio({ audio, userid }: audioProps) {
 
         if(!findUser) throw new Error('User tidak ditemukan')
 
-        const newAudio = await Audio.create({...audio})
+        const newAudio = await Audio.create({...audio, cloneAudio: audio.cloneAudio, author: userid})
+
+        
 
         return JSON.parse(JSON.stringify(newAudio))
 

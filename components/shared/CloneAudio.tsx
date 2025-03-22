@@ -89,7 +89,7 @@ export default function CloneAudio({ value, onChangeHandler }: DropdownProps) {
         <SelectContent className="shad-select-content bg-zinc-800 border-none">
           <SelectGroup>
             {cloneVoices.map((cloneVoice: IClone) => (
-              <SelectItem key={cloneVoice._id} value={cloneVoice.fileUrl}>
+              <SelectItem key={cloneVoice._id} value={cloneVoice._id}>
                 {cloneVoice.name}
               </SelectItem>
             ))}
