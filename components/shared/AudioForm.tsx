@@ -3,7 +3,7 @@ import CustomForm, { FieldType } from "@/components/shared/CustomForm"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 
-import { createAudio } from "@/lib/actions/audio.action"
+// import { createAudio } from "@/lib/actions/audio.action"
 import { createFormValidation } from "@/lib/validation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader } from "lucide-react"
@@ -37,16 +37,18 @@ export default function AudioForm({ userid }: { userid: string }) {
         
 
         try {
-            const newAudio = await createAudio({
-                audio: {...values},
-                userid
-            })
+            // const newAudio = await createAudio({
+            //     audio: {...values},
+            //     userid
+            // })
 
-            console.log(newAudio)
+            // console.log(newAudio)
 
-            if(newAudio) {
-                router.push('/')
-            }
+            // if(newAudio) {
+            //     router.push('/')
+            // }
+
+            console.log("ok")
         } catch(e) {
             console.error(e)
         }
