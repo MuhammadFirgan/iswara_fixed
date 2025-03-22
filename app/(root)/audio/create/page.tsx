@@ -12,7 +12,7 @@ export default async function page() {
     <section className="px-10 pb-10 sm:max-w-3xl mt-32">
         <h1 className="text-xl mb-10">Buat Audio Anda</h1>
         
-        <AudioForm userid={userid}/>
+        <AudioForm userid={userid as string}/>
     </section>
   )
 }
