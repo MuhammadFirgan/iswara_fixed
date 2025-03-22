@@ -11,7 +11,7 @@ interface UploadFileProps {
 
 export default function FileUpload({ onFieldChange }: UploadFileProps) {
   const [ files, setFiles ] = useState<File[]>([])
-  const [ preview, setPreview ] = useState<String>("")
+  const [ preview, setPreview ] = useState<string>("")
   const { startUpload, isUploading } = useUploadThing('imageUploader')
 
   const onDrop = useCallback( async (acceptedFiles: File[]) => {
@@ -23,7 +23,7 @@ export default function FileUpload({ onFieldChange }: UploadFileProps) {
     try {
 
       const res = await startUpload(acceptedFiles)
-      if(res?.length > 0) {
+      if(res && res?.length > 0) {
         setPreview(res[0].url)
         onFieldChange(res[0].url)
       }
