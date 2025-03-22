@@ -1,33 +1,33 @@
-'use server'
+// 'use server'
 
-import { audioProps } from "@/types"
-import { dbConnect } from "../database"
-import Audio from "../database/models/audio.model"
-import { randomUUID } from "crypto"
-import { getDuration } from "../utils"
-import User from "../database/models/user.model"
-
-
-
-export async function createAudio({ audio, userid }: audioProps) {
+// import { audioProps } from "@/types"
+// import { dbConnect } from "../database"
+// import Audio from "../database/models/audio.model"
+// import { randomUUID } from "crypto"
+// import { getDuration } from "../utils"
+// import User from "../database/models/user.model"
 
 
-    try {
-        await dbConnect()
 
-        const findUser = await User.findOne({_id: userid})
+// export async function createAudio({ audio, userid }: audioProps) {
 
-        if(!findUser) throw new Error('User tidak ditemukan')
 
-        const newAudio = await Audio.create({...audio, cloneAudio: audio.cloneAudio, author: userid})
+//     try {
+//         await dbConnect()
+
+//         const findUser = await User.findOne({_id: userid})
+
+//         if(!findUser) throw new Error('User tidak ditemukan')
+
+//         const newAudio = await Audio.create({...audio, cloneAudio: audio.cloneAudio, author: userid})
 
         
 
-        return JSON.parse(JSON.stringify(newAudio))
+//         return JSON.parse(JSON.stringify(newAudio))
 
-    } catch (error) {
-        console.error(error)
-    }
+//     } catch (error) {
+//         console.error(error)
+//     }
     
       
-}
+// }
