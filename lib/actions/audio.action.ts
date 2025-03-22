@@ -15,7 +15,7 @@ export async function createAudio({ audio, userid }: audioProps) {
     try {
         await dbConnect()
 
-        const findUser = User.findOne({_id: userid})
+        const findUser = await User.findOne({_id: userid})
 
         if(!findUser) throw new Error('User tidak ditemukan')
 
