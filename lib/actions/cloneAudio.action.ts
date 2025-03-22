@@ -21,8 +21,8 @@ export async function createCloneAudio({ name, myFile }: { name: string, myFile:
           method: 'POST',
           headers: {
             accept: 'application/json',
-            AUTHORIZATION: secretKey,
-            'X-USER-ID': userId
+            AUTHORIZATION: secretKey as string,
+            'X-USER-ID': userId as string
           },
           body: formData
         };
@@ -65,8 +65,8 @@ export async function deleteCloneAudio({ voiceUrl, voiceId }: { voiceUrl: string
             headers: {
                 accept: 'application/json', 
                 'content-type': 'application/json',
-                AUTHORIZATION: secretKey,
-                'X-USER-ID': userId
+                AUTHORIZATION: secretKey as string,
+                'X-USER-ID': userId as string
             },
             
             body: JSON.stringify({voice_id: voiceUrl})
