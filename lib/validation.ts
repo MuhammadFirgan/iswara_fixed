@@ -6,20 +6,17 @@ export const createFormValidation = z.object({
         .string()
         .min(2, 'Judul minimal 2 karakter')
         .max(50, 'Judul terlalu panjang'),
-    'description': z
-        .string()
-        .min(2, 'Deskripsi minimal 2 karakter')
-        .max(400, 'Deskripsi terlalu panjang')
-        .optional(),
-    'cloneAudio': z
-        .string(),
-    'voicePrompt': z
+    
+    'lyrics': z
         .string()
         .min(5, 'Tulis setidaknya 5 kata')
-        .max(1000, 'Prompt terlalu panjang, maksimal 1000 karakter'),
+        .max(2000, 'Prompt terlalu panjang, maksimal 1000 karakter'),
+    'gender': z
+        .string()
+        .min(2, 'Deskripsi minimal 2 karakter')
+        .max(400, 'Deskripsi terlalu panjang'),
     'thumbnail': z
         .string()
-        .optional()
 })
 
 export const loginFormValidation = z.object({

@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react"
+
 export interface UserProps {
     [x: string]: string
     fullName: string
@@ -24,6 +26,8 @@ export interface createUserProps {
       title: string
       profile: string
       name: string
+      slug: string
+      nip: string
   }
 
   export type loginProps = {
@@ -40,9 +44,14 @@ export interface createUserProps {
     userid: string
     audio: {
       title: string
-      description?: string
-      cloneAudio: string
-      voicePrompt: string
+      slug: string
+      audio: string
+      author: {
+        fullName: string
+      }
+      lyrics: string
+      gender: string
+      duration: string
       thumbnail?: string
     }
   }
@@ -52,4 +61,20 @@ export interface createUserProps {
     prompt: string
   }
 
+  export interface audioContextType {
+    audio: AudioProps | undefined;
+    setAudio: React.Dispatch<React.SetStateAction<AudioProps | undefined>>;
+  }
+
+  // export interface generateMusic {
+  //   title: string
+  //   setTitle: Dispatch<SetStateAction<string>>
+  //   lyrics: string
+  //   setLyrics: Dispatch<SetStateAction<string>>
+  //   gender: string
+  //   setGender: Dispatch<SetStateAction<string>>
+  //   taskId: string
+  //   setTaskId: Dispatch<SetStateAction<string>>
+    
+  // }
  

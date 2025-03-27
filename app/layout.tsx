@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import AudioProvider from "@/providers/AudioProvider";
 
 
 const poppins = Poppins({
@@ -23,12 +24,15 @@ export default function RootLayout({
   return (
     
     <html lang="en">
-      <body
-        className={`${poppins.className} antialiased bg-zinc-950 text-white relative`}
-      >
-      {children}
-        
-      </body>
+      <AudioProvider>
+        <body
+          className={`${poppins.className} antialiased bg-zinc-950 text-white relative`}
+        >
+          
+        {children}
+          
+        </body>
+      </AudioProvider>
     </html>
     
   );

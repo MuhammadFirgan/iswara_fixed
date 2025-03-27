@@ -1,10 +1,11 @@
 
 import MobileNav from "@/components/shared/MobileNav";
+import PodcastPlayer from "@/components/shared/PodcastPlayer";
 import Search from "@/components/shared/Search";
 import Sidebar from "@/components/shared/Sidebar";
 import Topbar from "@/components/shared/Topbar";
 import { getToken } from "@/constans/getToken";
-import { JwtPayload } from "jsonwebtoken";
+
 
 
 export type barProps = {
@@ -48,6 +49,7 @@ export default async function layout({
          
         </section>
       </div>
+      <PodcastPlayer />
     </main>
    
   )

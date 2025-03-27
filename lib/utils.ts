@@ -13,11 +13,27 @@ export async function getDuration(arrayBuffer: ArrayBuffer): Promise<number> {
   return (await audioBuffer).duration
 }
 
-export const formatTime = (time: number) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-  return `${String(minutes).padStart(2, '0')}.${String(seconds).padStart(2, '0')}`;
+
+export const formatTime = (duration: number) => {
+  
+  const durationInSeconds = parseFloat(duration);
+
+  
+  if (isNaN(durationInSeconds)) {
+    return "00:00"; 
+  }  
+  const minutes = Math.floor(duration / 60);
+  const remainingSeconds = Math.floor(duration % 60);
+  return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 };
+
+export const generateSlug = (title: string): string => {
+  return title
+        .toLowerCase() 
+        .replace(/[^a-z0-9\s-]/g, '') 
+        .replace(/\s+/g, '-') 
+        .trim(); 
+}
 
 
 

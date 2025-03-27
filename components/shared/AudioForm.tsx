@@ -3,7 +3,7 @@ import CustomForm, { FieldType } from "@/components/shared/CustomForm"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 
-// import { createAudio } from "@/lib/actions/audio.action"
+import { createAudio } from "@/lib/actions/audio.action"
 import { createFormValidation } from "@/lib/validation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader } from "lucide-react"
@@ -13,11 +13,16 @@ import { z } from "zod"
 import { useRouter } from 'next/navigation'
 import CloneAudio from "@/components/shared/CloneAudio"
 import FileUpload from "@/components/shared/FileUpload"
+import GenderOptions from "./GenderOptions"
+import GenerateMusic from "./GenerateMusic"
 
 export default function AudioForm({ userid }: { userid: string }) {
 
 
-    const [isSubmiting, setIsSubmiting] = useState(false)
+    const [isSubmiting, setIsSubmiting] = useState<boolean>(false)
+    
+
+    // fetch data dari getMusic, masukkan datanya ke db
     
     
     const router = useRouter()
@@ -27,30 +32,33 @@ export default function AudioForm({ userid }: { userid: string }) {
         defaultValues: {
             ...createFormValidation,
             title: '',
-            description: '',
-            voicePrompt: ''
+            lyrics: '',
+            gender: ''
             
         },
     })
         
     async function onSubmit(values: z.infer<typeof createFormValidation>) {
-        
+        setIsSubmiting(true)
 
         try {
-            // const newAudio = await createAudio({
-            //     audio: {...values},
-            //     userid
-            // })
+            const newAudio = await createAudio({
+                audio: {...values},
+                userid
+            })
 
-            // console.log(newAudio)
+            console.log(newAudio)
 
-            // if(newAudio) {
-            //     router.push('/')
-            // }
 
-            console.log("ok")
+            if(newAudio) {
+                router.push('/')
+            }
+
+           
         } catch(e) {
             console.error(e)
+        } finally {
+            setIsSubmiting(false)
         }
         
     }
@@ -61,39 +69,37 @@ export default function AudioForm({ userid }: { userid: string }) {
                 control={form.control}
                 type={FieldType.INPUT}
                 name="title"
-                label="Judul Audio"
-                placeholder="Judul Audio..."
+                label="Judul Musik"
+                placeholder="Masukkan Judul Musik..."
             />
             <CustomForm 
                 control={form.control}
                 type={FieldType.TEXTAREA}
-                name="description"
-                label="Deskripsi"
-                placeholder="Masukkan Deskripsi.."
+                name="lyrics"
+                label="Lirik Lagu"
+                placeholder="Masukkan Lirik.."
             />
-            <CustomForm 
-                control={form.control}
-                type={FieldType.TEXTAREA}
-                name="voicePrompt"
-                label="Text Bacaan"
-                placeholder="Masukkan Text Bacaan..."
-                
-            />
+            
         
 
             <FormField
                 control={form.control}
-                name="cloneAudio"
+                name="gender"
                 render={({ field }) => (
                     <FormItem>
                         <FormControl>
-                            <CloneAudio onChangeHandler={field.onChange} value={field.value} />
+                            <GenderOptions onChangeHandler={field.onChange} value={field.value} />
                         </FormControl>
 
                         <FormMessage />
                     </FormItem>
                 )}
             />
+            {/* <Button className="bg-primary">Buat lagu</Button>
+            <audio controls>
+                <source src="coba.mp3" type="audio/mpeg" />
+            </audio>
+            <GenerateMusic /> */}
             <FormField
                 control={form.control}
                 name="thumbnail"
@@ -110,7 +116,7 @@ export default function AudioForm({ userid }: { userid: string }) {
             
             
 
-            <Button type="submit" className="bg-primary w-full">
+            <Button type="submit" className={`bg-primary w-full ${isSubmiting ? 'bg-green-300 hover:cursor-not-allowed text-black' : ''}`} disabled={isSubmiting}>
                 {isSubmiting ? (
                     <>
                         memproses

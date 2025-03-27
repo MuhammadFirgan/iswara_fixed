@@ -81,10 +81,9 @@ export default function CloneAudio({ value, onChangeHandler }: DropdownProps) {
 
   return (
     <>
-      {/* Dropdown for selecting existing voices */}
       <Select onValueChange={onChangeHandler} value={value}>
         <SelectTrigger className="shad-select-trigger bg-zinc-900 border-none">
-          <SelectValue placeholder="Pilih Tiruan Suara" />
+          <SelectValue placeholder="Pilih Genre Musik" />
         </SelectTrigger>
         <SelectContent className="shad-select-content bg-zinc-800 border-none">
           <SelectGroup>
@@ -103,8 +102,36 @@ export default function CloneAudio({ value, onChangeHandler }: DropdownProps) {
         </SelectContent>
       </Select>
 
+
+
+
+
+
+
+
+      {/* <Select onValueChange={onChangeHandler} value={value}>
+        <SelectTrigger className="shad-select-trigger bg-zinc-900 border-none">
+          <SelectValue placeholder="Pilih Genre Musik" />
+        </SelectTrigger>
+        <SelectContent className="shad-select-content bg-zinc-800 border-none">
+          <SelectGroup>
+            {cloneVoices.map((cloneVoice: IClone) => (
+              <SelectItem key={cloneVoice._id} value={cloneVoice._id}>
+                {cloneVoice.name}
+              </SelectItem>
+            ))}
+            <Button
+              onClick={() => setIsModalOpen(true)} // Open modal
+              className="w-full"
+            >
+              Tambah suara tiruan
+            </Button>
+          </SelectGroup>
+        </SelectContent>
+      </Select> */}
+
       {/* Modal for adding new voice */}
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[99999]">
           <div className="bg-neutral-900 p-6 rounded-lg shadow-lg w-full max-w-md relative">
           
@@ -157,7 +184,7 @@ export default function CloneAudio({ value, onChangeHandler }: DropdownProps) {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

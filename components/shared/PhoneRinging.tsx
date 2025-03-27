@@ -11,11 +11,11 @@ const formatTime = (time: number) => {
   return `${String(minutes).padStart(2, '0')}.${String(seconds).padStart(2, '0')}`;
 };
 
-export default function PhoneRinging({ name, avatar }: { name: String; avatar: String }) {
+export default function PhoneRinging({ name, avatar, audio_url }: { name: String; avatar: String; audio_url: String; }) {
   const [isRinging, setIsRinging] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [recordingAudio, setRecordingAudio] = useState<HTMLAudioElement | null>(null); // State untuk menyimpan audio rekaman
+  const [recordingAudio, setRecordingAudio] = useState<HTMLAudioElement | null>(null); 
 
   useEffect(() => {
     let ringingAudio: HTMLAudioElement | null = null;
@@ -32,22 +32,17 @@ export default function PhoneRinging({ name, avatar }: { name: String; avatar: S
     }
 
     if (isRecording) {
-      const newRecordingAudio = new Audio("/ringing.mp3");
+      const newRecordingAudio = new Audio(audio_url);
 
-      // Simpan audio ke state agar bisa dihentikan nanti
       setRecordingAudio(newRecordingAudio);
 
-     
-
       newRecordingAudio.play();
-      setElapsedTime(0); // Reset waktu
+      setElapsedTime(0); 
 
-      // Timer berjalan setiap detik
       interval = setInterval(() => {
         setElapsedTime(prev => prev + 1);
       }, 1000);
 
-      // Hentikan ketika audio selesai
       newRecordingAudio.onended = () => {
         setIsRecording(false);
         clearInterval(interval!);
@@ -64,8 +59,8 @@ export default function PhoneRinging({ name, avatar }: { name: String; avatar: S
   const stopRecording = () => {
     if (recordingAudio) {
       recordingAudio.pause();
-      recordingAudio.currentTime = 0; // Reset ke awal
-      setRecordingAudio(null); // Hapus dari state
+      recordingAudio.currentTime = 0; 
+      setRecordingAudio(null); 
     }
     setIsRecording(false);
     setElapsedTime(0);
@@ -82,7 +77,7 @@ export default function PhoneRinging({ name, avatar }: { name: String; avatar: S
           <AlertDialogHeader>
             <AlertDialogDescription className="flex flex-col items-center gap-3 mb-20 text-xl">      
               <Avatar className="w-32 h-32">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={avatar} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-2 items-center">

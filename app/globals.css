@@ -9,3 +9,10 @@
 .text-primary {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-800
 }
+
+.glassmorphism-black {
+  background: rgba(18, 18, 18, 0.64);
+  backdrop-filter: blur(37px);
+  -webkit-backdrop-filter: blur(37px);
+}
+

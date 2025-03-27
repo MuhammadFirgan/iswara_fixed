@@ -43,7 +43,7 @@ export async function getUserById(id: string) {
   try {
     await dbConnect()
 
-    const userById = await User.findOne({_id: id})
+    const userById = await User.findOne({_id: id}).select('-password')
     return JSON.parse(JSON.stringify(userById))
   } catch (error) {
     console.log(error)

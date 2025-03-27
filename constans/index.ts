@@ -34,3 +34,4 @@ export const voiceTypes = [
 
 export const userId = process.env.PLAYHT_USER_ID
 export const secretKey = process.env.PLAYHT_SECRET_KEY
+export const newSecretKey = process.env.SUNOAI_SECRET_KEY
