@@ -56,10 +56,18 @@ export interface createUserProps {
     }
   }
 
-  export interface generateAudioProps {
-    voice: string
-    prompt: string
+
+  export interface paramsForAudio {
+    userid: string;
+    audio: {
+      title: string
+      lyrics: string
+      gender: string
+      thumbnail: string
+    }
+    audioSlug?: string
   }
+
 
   export interface audioContextType {
     audio: AudioProps | undefined;

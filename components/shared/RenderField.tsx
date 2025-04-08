@@ -44,7 +44,7 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                     
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
-                        <Textarea placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none"/>
+                        <Textarea placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none" disabled={props.disabled || false} />
                     </FormControl>
                     <FormMessage className="text-sm text-red-500" />
                 

@@ -10,11 +10,11 @@ export const createFormValidation = z.object({
     'lyrics': z
         .string()
         .min(5, 'Tulis setidaknya 5 kata')
-        .max(2000, 'Prompt terlalu panjang, maksimal 1000 karakter'),
+        .max(2000, 'Lirik terlalu panjang, maksimal 1000 karakter'),
     'gender': z
         .string()
-        .min(2, 'Deskripsi minimal 2 karakter')
-        .max(400, 'Deskripsi terlalu panjang'),
+        .min(2, 'Plih jenis kelamin')
+        .max(400, 'Pilih jenis kelamin'),
     'thumbnail': z
         .string()
 })

@@ -13,6 +13,8 @@ import { audioProps } from "@/types";
 import { useAudio } from "@/providers/AudioProvider";
 import { useEffect, useState } from "react";
 import { getToken } from "@/constans/getToken";
+import { deleteAudio } from "@/lib/actions/audio.action";
+import { useRouter } from "next/navigation";
   
 
 
@@ -21,6 +23,8 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
     const [ token, setToken ] = useState<string | null>(null)
 
     const { setAudio } = useAudio()
+
+    const router = useRouter()
 
     const handleClick = () => {
         setAudio({
@@ -31,6 +35,16 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
             author: audio?.author.fullName,
             duration: audio?.duration 
         })
+    }
+
+    const handleDelete = async (slug: string) => {
+        
+        const deletedAudio = await deleteAudio(slug)
+
+        if(deletedAudio) {
+            router.push("/")
+        }
+        
     }
 
    useEffect(() => {
@@ -47,12 +61,12 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
     <div className="flex items-center gap-2">
         <Button className="max-w-sm bg-primary rounded-3xl w-full py-3" onClick={handleClick}>Mainkan</Button>
         <div className="flex gap-3">
-            {token === userid._id  && (
+            {token === userid._id as string  && (
                 <>
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Link href="/audio/edit">
+                                <Link href={`/audio/${audio.slug}/edit`}>
                                     <Image src="/icons/edit.svg" width={64} height={64} alt="edit"/>
                                 </Link>
                             </TooltipTrigger>
@@ -64,9 +78,9 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Link href="/audio/delete">
+                                <div onClick={() => handleDelete(audio.slug)}>
                                     <Image src="/icons/delete.svg" width={64} height={64} alt="delete"/>
-                                </Link>
+                                </div>
                             </TooltipTrigger>
                             <TooltipContent className="bg-white">
                             <p className="text-black">Hapus Music</p>

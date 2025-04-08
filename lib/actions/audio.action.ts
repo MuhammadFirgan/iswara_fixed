@@ -1,11 +1,13 @@
 'use server'
 
-import { audioProps } from "@/types"
+import { paramsForAudio } from "@/types"
 import { dbConnect } from "../database"
 import Audio from "../database/models/audio.model"
 import { generateSlug, getDuration } from "../utils"
 import User from "../database/models/user.model"
-import { fetchAudio, saveAudioToUT } from "../helpers/audio"
+import { fetchAudio, generateAudio, saveAudioToUT } from "../helpers/audio"
+import { revalidatePath } from "next/cache"
+import { UTApi } from "uploadthing/server"
 
 export async function getAudios() {
     try {
@@ -23,8 +25,7 @@ export async function getAudios() {
     }
 }
 
-export async function createAudio({ audio, userid }: audioProps) {
-
+export async function createAudio({ audio, userid }: paramsForAudio) {
 
     try {
         await dbConnect()
@@ -39,30 +40,13 @@ export async function createAudio({ audio, userid }: audioProps) {
             return null
         }    
 
-
-        // const response1 = await fetch('https://api.musicapi.ai/api/v1/sonic/create', {
-        //     method: 'POST',
-        //     headers: {
-        //         authorization: newSecretKey as string
-        //     },
-        //     body: JSON.stringify({
-        //         'custom_mode': true,
-        //         'prompt': audio.lyrics,
-        //         'title': audio.title,
-        //         'tags': `nursery kids song, ${audio.genre} harmonica, piano, guitar, drum, volin, tuba, flute, xylophone`,
-        //         'mv': 'sonic-v3-5'
-        //     })
+        // const response = await generateAudio({
+        //     title: audio.title,
+        //     lyrics: audio.lyrics,
+        //     gender: audio.gender
         // })
-
-        // const result1 = response1.json()
-        
-        // if(response1.status !== 200) {
-        //     throw new Error("Gagal membuat musik")
-        // }
-
-
-        // const task_id = result1?.task_id
-        const task_id = "8cfff3ea-c818-4de4-b923-79a74a7fd182"
+        // console.log("res",response)
+        const task_id = "933aec2c-00df-4968-b91f-893eab618d48"
 
         if(!task_id) {
             throw new Error('Task ID is required');
@@ -70,8 +54,7 @@ export async function createAudio({ audio, userid }: audioProps) {
 
         
         console.time("check 2")
-        const { title, lyrics, tags, audio_url, duration } = await fetchAudio(task_id)
-        console.log(title)
+        const { audio_url, duration } = await fetchAudio(task_id)
         console.timeEnd("check 2")
 
 
@@ -85,13 +68,13 @@ export async function createAudio({ audio, userid }: audioProps) {
         const saveAudio = await saveAudioToUT(blob)
         console.timeEnd("check 4")
 
-        const slug = generateSlug(title)
+        const slug = generateSlug(audio.title)
 
         console.time("check 5")
         const newAudio = await Audio.create({
             task_id,
-            title,
-            lyrics,
+            title: audio.title,
+            lyrics: audio.lyrics,
             slug,
             gender: audio.gender,
             audio: saveAudio,
@@ -104,7 +87,6 @@ export async function createAudio({ audio, userid }: audioProps) {
 
         return JSON.parse(JSON.stringify(newAudio))
        
-        // console.log(result2.data[0].audio_url)
 
     } catch (error) {
         console.error(error)
@@ -116,7 +98,9 @@ export async function createAudio({ audio, userid }: audioProps) {
 export async function getAudioBySlug(slug: string) {
     try {
         await dbConnect()
-        const audioBySlug = await Audio.findOne({ slug }).populate({ path: 'author', model: User, select: '-password -role' })
+        const audioBySlug = await Audio.findOne({ slug })
+            .populate({ path: 'author', model: User, select: '-password -role' })
+            
 
         return JSON.parse(JSON.stringify(audioBySlug))
         
@@ -124,4 +108,66 @@ export async function getAudioBySlug(slug: string) {
         console.error(error)
     }
     
+}
+
+export async function updateAudio({ userid, audio, audioSlug }: paramsForAudio) {
+    try {
+        await dbConnect()
+
+        const findAudiotoUpdate = await Audio.findOne({ slug: audioSlug })
+        
+        if(!findAudiotoUpdate || findAudiotoUpdate.author.toHexString() !== userid) {
+            throw new Error("Unauthorized")
+        }
+
+
+        const update = {
+            title: audio.title,
+            slug: generateSlug(audio.title),
+            thumbnail: audio.thumbnail
+        }
+
+        const filter = {
+            slug: audioSlug
+        }
+
+        
+
+        const updatedAudio = await Audio.findOneAndUpdate(filter, update, { new: true })
+
+
+        revalidatePath(`/audio/${audioSlug}`)
+        
+
+        return JSON.parse(JSON.stringify(updatedAudio))
+    } catch(e) {
+        console.error(e)
+    }
+}
+
+export async function deleteAudio(audioSlug: string) {
+    try {
+        await dbConnect()
+
+        const findAudioToDelete = await Audio.findOne({ slug: audioSlug })
+
+        const getAudioUrl = findAudioToDelete.audio
+        const getThumbnailUrl = findAudioToDelete.thumbnail
+
+        const audioUrl = getAudioUrl.split('/f/')[1]?.split('-')[0]
+        const thumbnailUrl = getThumbnailUrl.split('/f/')[1]?.split('-')[0]
+
+        const utapi = new UTApi()
+
+        await utapi.deleteFiles([ audioUrl, thumbnailUrl ])
+
+        const deleteAudio = await Audio.findOneAndDelete({ slug: audioSlug })
+
+        revalidatePath('/')
+        return JSON.parse(JSON.stringify(deleteAudio))
+
+        
+    } catch(e) {
+        console.error(e)
+    }
 }

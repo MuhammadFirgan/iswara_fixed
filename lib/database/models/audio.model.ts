@@ -37,7 +37,7 @@ export interface IAudio extends Document {
 }
 
 const AudioSchema = new Schema({
-    _creationTime: { type: Number, default: Date.now },
+    _creationTime: { type: Date, default: Date.now },
     task_id: { type: String, required: true, unique: true },
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },

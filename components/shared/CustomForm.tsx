@@ -23,6 +23,7 @@ export interface CustomFormProps {
     placeholder?: string
     value?: string
     children?: React.ReactNode
+    disabled?: boolean
 }
 
 

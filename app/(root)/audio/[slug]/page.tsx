@@ -18,6 +18,10 @@ export default async function page({ params }: { params: Promise<{ slug: string 
     return <NotFound />
   }
 
+  const formatLyrics = (lyrics: string): string => {
+    return lyrics.replace(/\n/g, "<br />");
+  };
+
   return (
     <section className="relative">
       <div className="relative h-96 ">
@@ -49,7 +53,11 @@ export default async function page({ params }: { params: Promise<{ slug: string 
 
 
       <div className="px-10 flex flex-col gap-7 pt-10 lg:pb-10">
-        <p className="text-sm">{audioBySlug.lyrics}</p>
+        {/* <p className="text-sm">{audioBySlug.lyrics}</p> */}
+        <p
+          className="text-sm whitespace-pre-line"
+          dangerouslySetInnerHTML={{ __html: formatLyrics(audioBySlug.lyrics) }}
+        />
         <div className="w-full px-5 py-3 bg-zinc-800 rounded-xl flex items-center gap-10 lg:max-w-md">
           <Image src={audioBySlug.author.photo} width={50} height={50} alt="profile" className="aspect-square rounded-lg" />
           <div>
