@@ -11,7 +11,7 @@ export async function generateAudio({
     title: String;
     lyrics: string;
     gender: string;
-    }): Promise<{ taskId: string }> {
+    }): Promise<{ task_id: string }> {
         const response = await fetch('https://api.musicapi.ai/api/v1/sonic/create', {
             method: 'POST',
             headers: {
@@ -41,6 +41,7 @@ export async function fetchAudio(task_id: string): Promise<{
     audio_url: string
     duration: string
 }> {
+
    
 
     const response = await fetch(`https://api.musicapi.ai/api/v1/sonic/task/${task_id}`, {
@@ -50,9 +51,6 @@ export async function fetchAudio(task_id: string): Promise<{
         }
     })
 
-    if(response.status !== 200) {
-        throw new Error("Gagal membuat musik")
-    }
 
     const result = await response.json()
     const data = result.data[0]

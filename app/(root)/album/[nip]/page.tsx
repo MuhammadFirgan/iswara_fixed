@@ -1,8 +1,16 @@
 import Image from "next/image";
 import { Button } from '@/components/ui/button';
 import ListAudio from "@/components/shared/ListAudio";
+import { getAudioByAuthor } from "@/lib/actions/audio.action";
 
-export default function Album({ params }: { params: Promise<{ name: string }> }) {
+export default async function Album({ params }: { params: Promise<{ nip: string }> }) {
+
+  const { nip } = await params
+
+  const audios = await getAudioByAuthor(nip)
+
+  console.log(audios)
+  
     return (
       <section className="min-h-screen">
         <div className="relative h-96">
@@ -19,15 +27,23 @@ export default function Album({ params }: { params: Promise<{ name: string }> })
               </div>
               <div className="text-center flex flex-col gap-4 items-center ">
                 <h1 className="text-xl font-bold lg:text-4xl lg:max-w-xl">
-                  Muhammad Firgan
+                  {audios[0].author.fullName}
                 </h1>
-                <span className="text-sm lg:text-zinc-600">100 Audios</span>
+                <span className="text-sm lg:text-zinc-600">{audios.length} Audios</span>
                 <Button className="max-w-sm bg-primary rounded-3xl w-full">Mainkan</Button>
               </div>
             </div>
             <div className='mt-10 lg:px-10 flex flex-col gap-5'>
-              <ListAudio />
-              <ListAudio />
+              {audios.map((audio: any) => (
+                <ListAudio
+                  thumbnail={audio.thumbnail}
+                  slug={audio.slug}
+                  title={audio.title}
+                  lyrics={audio.lyrics}
+                  duration={audio.duration}
+                />
+              ))}
+       
             </div>
           </div>
         </div>

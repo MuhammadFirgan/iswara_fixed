@@ -14,8 +14,8 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }
 
-  if(token.role !== "admin") {
-    console.log('oke')
+  if(token.role !== "admin" && token.role !== "member") {
+   
     return NextResponse.redirect(new URL('/', request.url));
   }
 

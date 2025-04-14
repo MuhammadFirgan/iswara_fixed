@@ -9,12 +9,26 @@ import { fetchAudio, generateAudio, saveAudioToUT } from "../helpers/audio"
 import { revalidatePath } from "next/cache"
 import { UTApi } from "uploadthing/server"
 
-export async function getAudios() {
+export async function getAudios(query?: string) {
     try {
         await dbConnect()
+        
+
+        const audioCondition = query
+      ? {
+          $or: [
+            { title: { $regex: query, $options: "i" } }, 
+            { "author.fullName": { $regex: query, $options: "i" } }, 
+          ],
+        }
+      : {};
+        
+
 
         console.time("check audios")
-        const getAllAudios = await Audio.find().populate({ path: 'author', model: User, select: '-password -role' })
+        const getAllAudios = await Audio.find(audioCondition)
+            .populate({ path: 'author', model: User, select: '-password -role' })
+            .sort({ createdAt: 'desc' })
         console.timeEnd("check audios")
 
         
@@ -29,6 +43,7 @@ export async function createAudio({ audio, userid }: paramsForAudio) {
 
     try {
         await dbConnect()
+
 
         console.time("check 1")
         const findUser = await User.findOne({_id: userid}).select('-password -role')
@@ -45,32 +60,27 @@ export async function createAudio({ audio, userid }: paramsForAudio) {
         //     lyrics: audio.lyrics,
         //     gender: audio.gender
         // })
-        // console.log("res",response)
-        const task_id = "933aec2c-00df-4968-b91f-893eab618d48"
+        // console.log("res",response.task_id)
+        // const task_id = response.task_id as string
+        // console.log(task_id)
+        const task_id = "d5c3a68d-c8f1-48ad-ab4d-5b3e48b2823f"
 
         if(!task_id) {
             throw new Error('Task ID is required');
         }
 
         
-        console.time("check 2")
         const { audio_url, duration } = await fetchAudio(task_id)
-        console.timeEnd("check 2")
+    
 
-
-        console.time("check 3")
         const response3 = await fetch(audio_url)
 
         const blob = await response3.blob()
-        console.timeEnd("check 3")
 
-        console.time("check 4")
         const saveAudio = await saveAudioToUT(blob)
-        console.timeEnd("check 4")
 
         const slug = generateSlug(audio.title)
 
-        console.time("check 5")
         const newAudio = await Audio.create({
             task_id,
             title: audio.title,
@@ -82,8 +92,6 @@ export async function createAudio({ audio, userid }: paramsForAudio) {
             duration,
             author: userid
         })
-
-        console.timeEnd("check 5")
 
         return JSON.parse(JSON.stringify(newAudio))
        
@@ -167,6 +175,30 @@ export async function deleteAudio(audioSlug: string) {
         return JSON.parse(JSON.stringify(deleteAudio))
 
         
+    } catch(e) {
+        console.error(e)
+    }
+}
+
+export async function getAudioByAuthor(nip: string) {
+    try {
+        await dbConnect()
+
+        const getAuthorByNip = await User.findOne({ nip })
+
+        if (!getAuthorByNip) {
+            console.error("Author tidak ditemukan")
+            throw new Error("gagal")
+        }
+
+        const userid = getAuthorByNip._id
+
+
+        const audioByAuthor = await Audio.find({ author: userid })
+            .populate({ path: 'author', model: User, select: '-password -role' })
+
+        return JSON.parse(JSON.stringify(audioByAuthor))
+
     } catch(e) {
         console.error(e)
     }

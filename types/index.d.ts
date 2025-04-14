@@ -74,15 +74,19 @@ export interface createUserProps {
     setAudio: React.Dispatch<React.SetStateAction<AudioProps | undefined>>;
   }
 
-  // export interface generateMusic {
-  //   title: string
-  //   setTitle: Dispatch<SetStateAction<string>>
-  //   lyrics: string
-  //   setLyrics: Dispatch<SetStateAction<string>>
-  //   gender: string
-  //   setGender: Dispatch<SetStateAction<string>>
-  //   taskId: string
-  //   setTaskId: Dispatch<SetStateAction<string>>
-    
-  // }
+  export type UrlQueryParams = {
+    params: string
+    key: string
+    value: string | null
+  }
+  
+  export type RemoveUrlQueryParams = {
+    params: string
+    keysToRemove: string[]
+  }
+
+  export type SearchParamProps = {
+    params: { id: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+  }
  
