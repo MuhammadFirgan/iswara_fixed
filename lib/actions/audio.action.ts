@@ -55,22 +55,29 @@ export async function createAudio({ audio, userid }: paramsForAudio) {
             return null
         }    
 
-        // const response = await generateAudio({
-        //     title: audio.title,
-        //     lyrics: audio.lyrics,
-        //     gender: audio.gender
-        // })
-        // console.log("res",response.task_id)
-        // const task_id = response.task_id as string
-        // console.log(task_id)
-        const task_id = "d5c3a68d-c8f1-48ad-ab4d-5b3e48b2823f"
+        const response = await generateAudio({
+            title: audio.title,
+            lyrics: audio.lyrics,
+            gender: audio.gender
+        })
+        console.log("res",response.task_id)
+        const task_id = response.task_id as string
+        console.log(task_id)
+        // const task_id = "a5c5f802-8259-43d8-9482-cdda8011283e"
+
+    
 
         if(!task_id) {
             throw new Error('Task ID is required');
         }
 
         
-        const { audio_url, duration } = await fetchAudio(task_id)
+        const fetchedAudio = await fetchAudio(task_id)
+        console.log(fetchedAudio)
+        
+
+        const audio_url = fetchedAudio.audio_url
+        const duration = fetchedAudio.duration || ""
     
 
         const response3 = await fetch(audio_url)

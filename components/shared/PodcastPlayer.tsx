@@ -71,10 +71,9 @@ const PodcastPlayer = () => {
     }
   }, []);
 
-  
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
-      setDuration(audioRef.current.duration);
+      setDuration(audioRef.current?.duration);
     }
   };
 
@@ -83,6 +82,7 @@ const PodcastPlayer = () => {
     setIsPlaying(false);
   };
 
+  console.log(audioRef.current?.duration)
   
   useEffect(() => {
     const audioElement = audioRef.current;

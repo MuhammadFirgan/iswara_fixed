@@ -18,7 +18,7 @@ export default async function page({ searchParams }: SearchParamProps) {
     <section className="flex flex-col lg:flex-row w-full mt-28 overflow-hidden">
       <div className="flex flex-col items-center w-full sm:max-w-2xl sm:mx-8">
         <div className="w-full px-4 bg-primary rounded max-w-[400px] sm:max-w-2xl mx-auto flex justify-between items-center">
-          <h1 className="py-10 text-xl">AI Bicara, Kamu Mendengar</h1>
+          <h1 className="py-10 text-xl">Dengarkan AI bernyanyi</h1>
           <Image src="/AI.png" width={50} height={50} alt="AI image" className="w-32" />
         </div>
         <div className="flex justify-center gap-4 sm:gap-5 sm:justify-normal flex-wrap pt-10 lg:min-h-screen ">

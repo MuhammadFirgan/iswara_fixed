@@ -9,10 +9,6 @@ import Image from 'next/image';
 import { barProps } from '@/app/(root)/layout';
 
 
-
-
-
-
 export default function Sidebar({ role, token, type = "second" } : barProps) {
  
 
