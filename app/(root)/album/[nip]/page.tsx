@@ -9,7 +9,7 @@ export default async function Album({ params }: { params: Promise<{ nip: string 
 
   const audios = await getAudioByAuthor(nip)
 
-  console.log(audios)
+  
   
     return (
       <section className="min-h-screen">
@@ -30,16 +30,15 @@ export default async function Album({ params }: { params: Promise<{ nip: string 
                   {audios[0].author.fullName}
                 </h1>
                 <span className="text-sm lg:text-zinc-600">{audios.length} Audios</span>
-                <Button className="max-w-sm bg-primary rounded-3xl w-full">Mainkan</Button>
               </div>
             </div>
             <div className='mt-10 lg:px-10 flex flex-col gap-5'>
               {audios.map((audio: any) => (
                 <ListAudio
+                  key={audio.slug}
                   thumbnail={audio.thumbnail}
                   slug={audio.slug}
                   title={audio.title}
-                  lyrics={audio.lyrics}
                   duration={audio.duration}
                 />
               ))}

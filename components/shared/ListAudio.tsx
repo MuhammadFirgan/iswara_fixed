@@ -6,11 +6,10 @@ type ListAudioProps = {
   thumbnail: string
   slug: string
   title: string
-  lyrics: string
   duration: number
 }
 
-export default function ListAudio({ thumbnail, slug, title, lyrics, duration }: ListAudioProps) {
+export default function ListAudio({ thumbnail, slug, title, duration }: ListAudioProps) {
   return (
     <div className='w-full bg-neutral-900 px-8 py-6 flex flex-col gap-4 rounded-xl'>
       
@@ -20,10 +19,9 @@ export default function ListAudio({ thumbnail, slug, title, lyrics, duration }: 
             <Link href={`/audio/${slug}`}>
                 <h3 className="text-lg ">{title}</h3>
             </Link>
-            <span className="line-clamp-1 text-xs text-zinc-400">{formatTime(parseInt(duration))}</span>
+            <span className="line-clamp-1 text-xs text-zinc-400">{formatTime(duration)}</span>
         </div>
       </div>
-        <p className='line-clamp-2 text-sm text-zinc-400'>{lyrics}</p>
         <span className="text-sm text-zinc-500 block pt-5">20 November 2024</span>
     </div>
   )

@@ -7,10 +7,10 @@ export const createFormValidation = z.object({
         .min(2, 'Judul minimal 2 karakter')
         .max(50, 'Judul terlalu panjang'),
     
-    'lyrics': z
+    'description': z
         .string()
         .min(5, 'Tulis setidaknya 5 kata')
-        .max(2000, 'Lirik terlalu panjang, maksimal 1000 karakter'),
+        .max(4600, 'Lirik terlalu panjang, maksimal 4000 karakter'),
     'gender': z
         .string()
         .min(2, 'Plih jenis kelamin')

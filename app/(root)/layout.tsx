@@ -4,6 +4,7 @@ import PodcastPlayer from "@/components/shared/PodcastPlayer";
 import Search from "@/components/shared/Search";
 import Sidebar from "@/components/shared/Sidebar";
 import Topbar from "@/components/shared/Topbar";
+import { Toaster } from "@/components/ui/toaster";
 import { getToken } from "@/constans/getToken";
 
 
@@ -47,7 +48,7 @@ export default async function layout({
 
           {children}
           
-         
+          <Toaster />
         </section>
       </div>
       <PodcastPlayer />

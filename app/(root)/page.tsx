@@ -11,7 +11,6 @@ export default async function page({ searchParams }: SearchParamProps) {
 
   const audios = await getAudios(query || undefined)
 
-
   
   return (
     
@@ -35,12 +34,18 @@ export default async function page({ searchParams }: SearchParamProps) {
       <div className="lg:fixed lg:right-0 lg:bottom-0 lg:top-10 lg:min-h-screen lg:w-[350px] lg:bg-neutral-900 px-4 py-8">
       {/* <div className="px-4 py-8 sm:min-h-screen sm:w-[350px] sm:bg-neutral-900 rounded mr-5"> */}
         <h1 className="mb-4">Trending</h1>
-        <Link href={`/audio/${audios[0].slug}`}>
-          <Image src={audios[0].thumbnail} width={200} height={200} alt="trending" className="w-full rounded"/>
-          <h3 className="line-clamp-2 pt-4 text-sm font-bold ">{audios[0].title}</h3>
-        </Link>
+        { audios && audios.length > 0 && (
+          <Link href={`/audio/${audios[0].slug}`}>
+            <Image src={audios[0].thumbnail} width={200} height={200} alt="trending" className="w-full h-56 rounded"/>
+            <h3 className="line-clamp-2 pt-4 text-sm font-bold ">{audios[0].title}</h3>
+          </Link>
+        ) }
 
-        {audios.slice(1).map((audio: any) => (
+        {audios
+          .slice(1)
+          .sort(() => Math.random() - 0.5) // acak urutan
+          .slice(0, 4)
+          .map((audio: any) => (
           <Link href={`/audio/${audio.slug}`} className="flex items-center mt-8 gap-3" key={audio._id}>
             <Image src={audio.thumbnail} width={200} height={200} alt="trending" className="w-12 h-12 rounded"/>
             <h3 className="line-clamp-2 text-sm font-bold">{audio.title}</h3>

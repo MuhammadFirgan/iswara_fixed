@@ -15,7 +15,7 @@ const UserSchema = new Schema({
     email: { type: String, required: true, unique: true },
     nip: { type: String, required: true, unique: true },
     photo: { type: String },
-    password: { type: String },
+    password: { type: String, required: true },
     role: { type: Schema.Types.ObjectId, ref: "Role" }
 })
 

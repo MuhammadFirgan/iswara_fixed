@@ -1,39 +1,60 @@
 'use server'
 
-import { paramsForAudio } from "@/types"
+import { Model, paramsForAudio } from "@/types"
 import { dbConnect } from "../database"
 import Audio from "../database/models/audio.model"
-import { generateSlug, getDuration } from "../utils"
+import { formatTime, generateSlug, getDuration } from "../utils"
 import User from "../database/models/user.model"
-import { fetchAudio, generateAudio, saveAudioToUT } from "../helpers/audio"
+import {  queryTtsResult, saveAudioToUT, submitItsRequest } from "../helpers/audio"
 import { revalidatePath } from "next/cache"
 import { UTApi } from "uploadthing/server"
+import CreateAudio from "../database/models/createAudio.model"
+import redis from "../redis"
+import { prosaApiKey } from "@/constans"
+import Speech from "../database/models/speech.model"
+import { revalidateCache } from "../cache"
+
+const TTL = 3600
 
 export async function getAudios(query?: string) {
+
+    const CACHE_KEY = query
+        ? `audios:query:${query.toLowerCase().trim()}`
+        : 'audios:all'
     try {
         await dbConnect()
         
-
-        const audioCondition = query
-      ? {
-          $or: [
-            { title: { $regex: query, $options: "i" } }, 
-            { "author.fullName": { $regex: query, $options: "i" } }, 
-          ],
+        const cachedResult = await redis.get(CACHE_KEY)
+        if (cachedResult) {
+            
+            return JSON.parse(cachedResult);
         }
-      : {};
+
+        let conditions = {};
+
+        if (query) {
+            conditions = {
+                $or: [
+                    { title: { $regex: query, $options: 'i' } },
+                    { "author.fullName": { $regex: query, $options: 'i' } }
+                ]
+            };
+        }
         
 
 
-        console.time("check audios")
-        const getAllAudios = await Audio.find(audioCondition)
+        // console.time("check audios")
+        const getAllAudios = await Speech.find(conditions)
             .populate({ path: 'author', model: User, select: '-password -role' })
             .sort({ createdAt: 'desc' })
-        console.timeEnd("check audios")
+        // const getAllAudios = await CreateAudio.find(conditions)
+        //     .populate({ path: 'author', model: User, select: '-password -role' })
+        //     .sort({ createdAt: 'desc' })
+        // console.timeEnd("check audios")
 
-        
-        return JSON.parse(JSON.stringify(getAllAudios))
+        await redis.setex(CACHE_KEY, TTL, JSON.stringify(getAllAudios));
 
+        return JSON.parse(JSON.stringify(getAllAudios));
     } catch (error) {
         console.error(error)
     }
@@ -43,64 +64,116 @@ export async function createAudio({ audio, userid }: paramsForAudio) {
 
     try {
         await dbConnect()
+ 
 
-
-        console.time("check 1")
-        const findUser = await User.findOne({_id: userid}).select('-password -role')
-        console.timeEnd("check 1")
-
-
-        if(!findUser) {
-            throw new Error('User tidak ditemukan')
-            return null
-        }    
-
-        const response = await generateAudio({
-            title: audio.title,
-            lyrics: audio.lyrics,
-            gender: audio.gender
-        })
-        console.log("res",response.task_id)
-        const task_id = response.task_id as string
-        console.log(task_id)
-        // const task_id = "a5c5f802-8259-43d8-9482-cdda8011283e"
-
-    
-
-        if(!task_id) {
-            throw new Error('Task ID is required');
-        }
-
+        const { job_id } = await submitItsRequest(audio.description, 'opus', audio.gender)
+       
         
-        const fetchedAudio = await fetchAudio(task_id)
-        console.log(fetchedAudio)
-        
+        // const job_id = "068319a8-04f1-7a4d-8000-43aa8b09cd27"
+        const resultBuffer = await queryTtsResult(job_id)
 
-        const audio_url = fetchedAudio.audio_url
-        const duration = fetchedAudio.duration || ""
-    
+        const audioBuffer = resultBuffer.audioBuffer
+        const audioDuration = resultBuffer.duration as number
+       
 
-        const response3 = await fetch(audio_url)
+        const uint8Array = new Uint8Array(audioBuffer);
+        const blob = new Blob([uint8Array], { type: "audio/mpeg" })
 
-        const blob = await response3.blob()
-
-        const saveAudio = await saveAudioToUT(blob)
+        const getAudioUrl = await saveAudioToUT(blob)
 
         const slug = generateSlug(audio.title)
+        // const duration = formatTime(audioDuration)
 
-        const newAudio = await Audio.create({
-            task_id,
+        const newAudio = await Speech.create({
+            job_id,
             title: audio.title,
-            lyrics: audio.lyrics,
+            description: audio.description,
             slug,
-            gender: audio.gender,
-            audio: saveAudio,
+            tts_model: audio.gender,
+            url: getAudioUrl,
             thumbnail: audio.thumbnail,
-            duration,
+            duration: audioDuration,
             author: userid
         })
+        await revalidateCache({ slug, authorNip: userid })
+        revalidatePath('/')
 
         return JSON.parse(JSON.stringify(newAudio))
+
+
+       
+        // console.time("check 1")
+        // const findUser = await User.findOne({_id: userid}).select('-password -role')
+        // console.timeEnd("check 1")
+
+
+        // if(!findUser) {
+        //     throw new Error('User tidak ditemukan')
+        //     return null
+        // }    
+
+
+        // const response = await generateAudio({
+        //     title: audio.title,
+        //     lyrics: audio.lyrics,
+        //     gender: audio.gender
+        // })
+        // console.log("res",response.task_id)
+        // const task_id = response.task_id as string
+        // console.log(task_id)
+        // const task_id = "24ff3e77-4ce4-46f4-8664-d499d5ac805b"
+
+    
+
+        // if(!task_id) {
+        //     throw new Error('Task ID is required');
+        // }
+
+        // const slug = generateSlug(audio.title)
+
+        // const saveTaskId = await CreateAudio.create({
+        //     task_id,
+        //     title: audio.title,
+        //     slug,
+        //     gender: audio.gender,
+        //     thumbnail: audio.thumbnail,
+        //     author: userid
+        // })
+
+        // revalidatePath('/')
+
+        // return JSON.stringify(JSON.parse(saveTaskId))
+
+        
+        // const fetchedAudio = await fetchAudio(task_id)
+        // console.log(fetchedAudio)
+        
+
+        // const audio_url = fetchedAudio.audio_url
+        // const duration = fetchedAudio.duration || ""
+    
+
+        // const response3 = await fetch(audio_url)
+
+        // const blob = await response3.blob()
+
+        // const saveAudio = await saveAudioToUT(blob)
+
+        // const slug = generateSlug(audio.title)
+
+        // const newAudio = await Audio.create({
+        //     task_id,
+        //     title: audio.title,
+        //     lyrics: audio.lyrics,
+        //     slug,
+        //     gender: audio.gender,
+        //     audio: saveAudio,
+        //     thumbnail: audio.thumbnail,
+        //     duration,
+        //     author: userid
+        // })
+
+        // return JSON.parse(JSON.stringify(saveTaskId))
        
 
     } catch (error) {
@@ -111,13 +184,26 @@ export async function createAudio({ audio, userid }: paramsForAudio) {
 }
 
 export async function getAudioBySlug(slug: string) {
+
+    const CACHE_KEY = `audio:slug:${slug}`
+
     try {
         await dbConnect()
-        const audioBySlug = await Audio.findOne({ slug })
-            .populate({ path: 'author', model: User, select: '-password -role' })
-            
 
-        return JSON.parse(JSON.stringify(audioBySlug))
+        const cached = await redis.get(CACHE_KEY);
+        if (cached) {
+            return JSON.parse(cached);
+        }
+        const audioBySlug = await Speech.findOne({ slug })
+            .populate({ path: 'author', model: User, select: '-password -role' })
+
+        if(audioBySlug) {
+            await redis.setex(CACHE_KEY, TTL, JSON.stringify(audioBySlug))
+            return JSON.parse(JSON.stringify(audioBySlug))
+        }
+        
+        return null;            
+
         
     } catch (error) {
         console.error(error)
@@ -129,12 +215,20 @@ export async function updateAudio({ userid, audio, audioSlug }: paramsForAudio) 
     try {
         await dbConnect()
 
-        const findAudiotoUpdate = await Audio.findOne({ slug: audioSlug })
+        const findAudiotoUpdate = await Speech.findOne({ slug: audioSlug })
         
         if(!findAudiotoUpdate || findAudiotoUpdate.author.toHexString() !== userid) {
             throw new Error("Unauthorized")
         }
 
+        const oldThumbnailUrl = findAudiotoUpdate.thumbnail
+
+        const oldThumbnailKey = oldThumbnailUrl.split('/f/')[1]
+
+        const utapi = new UTApi();
+        if (oldThumbnailKey) {
+            await utapi.deleteFiles([oldThumbnailKey]);
+        }
 
         const update = {
             title: audio.title,
@@ -148,7 +242,7 @@ export async function updateAudio({ userid, audio, audioSlug }: paramsForAudio) 
 
         
 
-        const updatedAudio = await Audio.findOneAndUpdate(filter, update, { new: true })
+        const updatedAudio = await Speech.findOneAndUpdate(filter, update, { new: true })
 
 
         revalidatePath(`/audio/${audioSlug}`)
@@ -162,25 +256,41 @@ export async function updateAudio({ userid, audio, audioSlug }: paramsForAudio) 
 
 export async function deleteAudio(audioSlug: string) {
     try {
-        await dbConnect()
 
-        const findAudioToDelete = await Audio.findOne({ slug: audioSlug })
+        await dbConnect();
 
-        const getAudioUrl = findAudioToDelete.audio
-        const getThumbnailUrl = findAudioToDelete.thumbnail
+        const audioDoc = await Speech.findOne({ slug: audioSlug });
+        // const taskDoc = await CreateAudio.findOne({ slug: audioSlug });
 
-        const audioUrl = getAudioUrl.split('/f/')[1]?.split('-')[0]
-        const thumbnailUrl = getThumbnailUrl.split('/f/')[1]?.split('-')[0]
+        if (!audioDoc) {
+            throw new Error("Audio document not found");
+        }
 
-        const utapi = new UTApi()
+        const audioUrlPart = audioDoc.url?.split('/f/')[1];
+        const thumbnailUrlPart = audioDoc.thumbnail?.split('/f/')[1]?.split('-')[0];
 
-        await utapi.deleteFiles([ audioUrl, thumbnailUrl ])
+        const filesToDelete = [audioUrlPart, thumbnailUrlPart].filter(Boolean);
+        const utapi = new UTApi();
 
-        const deleteAudio = await Audio.findOneAndDelete({ slug: audioSlug })
+        if (filesToDelete.length > 0) {
+            await utapi.deleteFiles(filesToDelete);
+        }
 
-        revalidatePath('/')
-        return JSON.parse(JSON.stringify(deleteAudio))
+        const deletedAudio = await Speech.findOneAndDelete({ slug: audioSlug });
+        // const deletedTask = await CreateAudio.findOneAndDelete({ slug: audioSlug });
 
+        const authorNip = audioDoc.author?.nip
+
+        await revalidateCache({ slug: audioSlug, authorNip })
+        revalidatePath('/');
+
+        // return {
+        //     success: true,
+        //     deletedAudio: JSON.parse(JSON.stringify(deletedAudio)),
+        //     deletedTask: JSON.parse(JSON.stringify(deletedTask)),
+        // };
+
+        return JSON.parse(JSON.stringify(deletedAudio))
         
     } catch(e) {
         console.error(e)
@@ -188,11 +298,18 @@ export async function deleteAudio(audioSlug: string) {
 }
 
 export async function getAudioByAuthor(nip: string) {
+    const CACHE_KEY = `audio:author:${nip}`
+   
     try {
         await dbConnect()
 
-        const getAuthorByNip = await User.findOne({ nip })
+        const cachedAudios = await redis.get(CACHE_KEY);
+        if (cachedAudios) {
+            return JSON.parse(cachedAudios);
+        }
 
+        const getAuthorByNip = await User.findOne({ nip })
+        
         if (!getAuthorByNip) {
             console.error("Author tidak ditemukan")
             throw new Error("gagal")
@@ -201,12 +318,34 @@ export async function getAudioByAuthor(nip: string) {
         const userid = getAuthorByNip._id
 
 
-        const audioByAuthor = await Audio.find({ author: userid })
+        const audioByAuthor = await Speech.find({ author: userid })
             .populate({ path: 'author', model: User, select: '-password -role' })
+
+        await redis.setex(CACHE_KEY, TTL, JSON.stringify(audioByAuthor));
 
         return JSON.parse(JSON.stringify(audioByAuthor))
 
     } catch(e) {
         console.error(e)
+    }
+}
+
+export async function getAllModel(): Promise<Model[]> {
+    try {
+        if (!prosaApiKey) throw new Error("API key is missing");
+        const response = await fetch('https://api.prosa.ai/v2/speech/tts/models', {
+            method: 'GET',
+            headers: {
+                'x-api-key': prosaApiKey
+            }
+        })
+
+        const result = await response.json()
+
+        return JSON.parse(JSON.stringify(result))
+        
+    } catch (error) {
+        console.error(error)
+        return []
     }
 }

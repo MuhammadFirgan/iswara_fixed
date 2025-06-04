@@ -22,15 +22,15 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
     const [isSubmiting, setIsSubmiting] = useState<boolean>(false)
     const { toast } = useToast()
 
+
     useEffect(() => {
         if(type === "update" && audioSlug) {
-            console.log(audioSlug, type)
             const fetchData = async () => {
                 const data = await getAudioBySlug(audioSlug)
                 if(data) {
                     form.setValue("title", data.title)
-                    form.setValue("lyrics", data.lyrics)
-                    form.setValue("gender", data.gender)
+                    form.setValue("description", data.description)
+                    form.setValue("gender", data.tts_model)
                 }
             }
 
@@ -47,7 +47,7 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
         defaultValues: {
             ...createFormValidation,
             title: '',
-            lyrics: '',
+            description: '',
             gender: ''
             
         },
@@ -56,7 +56,6 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
     async function onSubmit(values: z.infer<typeof createFormValidation>) {
         setIsSubmiting(true)
     
-
 
         if(type === "create") {
             try {
@@ -70,11 +69,13 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
                     router.push('/')
                 }
 
-                toast({ title: "Berhasil membuat musik" })
+                toast({ title: "Berhasil membuat audio", variant: 'success' })
            
-            } catch(e) {
-                console.error(e)
-                toast({ title: "Gagal membuat musik", variant: "destructive" })
+            } catch(e: any) {
+                console.log(e)
+                // setIsError('Gagal Membuat Musik')
+                toast({ title: "Gagal membuat audio", variant: "destructive" })
+                
             } finally {
                 setIsSubmiting(false)
             }
@@ -93,10 +94,14 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
                     audioSlug
                 })
 
-                toast({ title: "Berhasil mengupdate musik" })
-            } catch(e) {
-                console.error(e)
-                toast({ title: "Gagal membuat musik", variant: "destructive" })
+                if (updatedAudio) {
+                    router.push('/')
+                }
+                
+                toast({ title: "Berhasil mengupdate data" })
+            } catch(e: any) {
+                console.error('error : ', e)
+                toast({ title: "Gagal mengupdate data", variant: "destructive" })
             } finally {
                 setIsSubmiting(false)
             }
@@ -105,70 +110,77 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
         
     }
   return (
-    <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <CustomForm 
-                control={form.control}
-                type={FieldType.INPUT}
-                name="title"
-                label="Judul Musik"
-                placeholder="Masukkan Judul Musik..."
-            />
-            <CustomForm 
-                control={form.control}
-                type={FieldType.TEXTAREA}
-                name="lyrics"
-                label="Lirik Lagu"
-                placeholder="Masukkan Lirik.."
-                disabled={type === "update"}
-            />
-            
-            
-            <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                    <FormItem>
-                        <FormControl>
-                            <GenderOptions onChangeHandler={field.onChange} value={field.value} disabled={type === "update"}/>
-                        </FormControl>
+    <> 
+        {/* {isError && (
+            <div className="absolute bottom-0 right-0 bg-red-500 text-white">{isError}</div>
+        )} */}
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <CustomForm 
+                    control={form.control}
+                    type={FieldType.INPUT}
+                    name="title"
+                    label="Judul Audio"
+                    placeholder="Masukkan Judul Audio..."
+                />
+                <CustomForm 
+                    control={form.control}
+                    type={FieldType.TEXTAREA}
+                    name="description"
+                    label="Narasi text"
+                    placeholder="Masukkan text.."
+                    disabled={type === "update"}
+                />
+                
+                
+                <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormControl>
+                                <GenderOptions onChangeHandler={field.onChange} value={field.value} disabled={type === "update"}/>
+                            </FormControl>
 
-                        <FormMessage className="text-sm text-red-500"/>
-                    </FormItem>
-                )}
-            />
+                            <FormMessage className="text-sm text-red-500"/>
+                        </FormItem>
+                    )}
+                />
+                
             
-          
-            <FormField
-                control={form.control}
-                name="thumbnail"
-                render={({ field }) => (
-                    <FormItem>
-                        <FormControl>
-                        </FormControl>
-                            <FileUpload onFieldChange={field.onChange}/>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            
-            
-            
+                <FormField
+                    control={form.control}
+                    name="thumbnail"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormControl>
+                            </FormControl>
+                                <FileUpload onFieldChange={field.onChange}/>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                
+                
+                
 
-            <Button type="submit" className={`bg-primary w-full ${isSubmiting ? 'bg-green-300 hover:cursor-not-allowed text-black' : ''}`} disabled={isSubmiting}>
-                {isSubmiting ? (
-                    <>
-                        memproses
-                        <Loader size={20} className="animate-spin ml-2" />
-                    </>
-                ) : (
-                    <>
-                        Simpan
-                    </>
-                )}
-            </Button>
-        </form>
-    </Form>
+                <Button type="submit" className={`bg-primary w-full ${isSubmiting ? 'bg-green-300 hover:cursor-not-allowed text-black' : ''}`} disabled={isSubmiting}>
+                    {isSubmiting ? (
+                        <>
+                            memproses
+                            <Loader size={20} className="animate-spin ml-2" />
+                        </>
+                    ) : (
+                        <>
+                            Simpan
+                        </>
+                    )}
+                </Button>
+            </form>
+        </Form>
+
+
+    </>
   )
 }
 

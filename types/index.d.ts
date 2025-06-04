@@ -45,7 +45,7 @@ export interface createUserProps {
     audio: {
       title: string
       slug: string
-      audio: string
+      url: string
       author: {
         fullName: string
       }
@@ -61,7 +61,7 @@ export interface createUserProps {
     userid: string;
     audio: {
       title: string
-      lyrics: string
+      description: string
       gender: string
       thumbnail: string
     }
@@ -89,4 +89,15 @@ export interface createUserProps {
     params: { id: string }
     searchParams: { [key: string]: string | string[] | undefined }
   }
+
+  export type Model = {
+    name: string;
+    label: string;
+    language: string;
+    domain: string;
+    voice: string;
+    gender: string;
+    channels: number;
+    samplerate: number;
+  };
  

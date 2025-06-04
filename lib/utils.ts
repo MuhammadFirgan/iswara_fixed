@@ -18,10 +18,7 @@ export async function getDuration(arrayBuffer: ArrayBuffer): Promise<number> {
 
 export const formatTime = (duration: number) => {
   
-  const durationInSeconds = parseFloat(duration);
-
-  
-  if (isNaN(durationInSeconds)) {
+  if (isNaN(duration)) {
     return "00:00"; 
   }  
   const minutes = Math.floor(duration / 60);
