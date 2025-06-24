@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import qs from 'query-string'
 import { RemoveUrlQueryParams, UrlQueryParams } from "@/types"
+import redis from "./redis"
 
 
 export function cn(...inputs: ClassValue[]) {
@@ -63,6 +64,19 @@ export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryPara
     { skipNull: true }
   )
 }
+
+// export async function getCachedOrDB(cacheKey: string, dbQuery: () => Promise<any>) {
+//   const cached = await redis.get(cacheKey)
+
+//   if(cached) return JSON.parse(cached)
+
+//   const result = await dbQuery()
+
+//   await redis.setex(cacheKey, 3600, JSON.stringify(result))
+
+//   return result
+
+// }
 
 
 

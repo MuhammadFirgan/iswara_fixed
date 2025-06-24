@@ -58,7 +58,6 @@ export interface createUserProps {
 
 
   export interface paramsForAudio {
-    userid: string;
     audio: {
       title: string
       description: string
@@ -86,8 +85,8 @@ export interface createUserProps {
   }
 
   export type SearchParamProps = {
-    params: { id: string }
-    searchParams: { [key: string]: string | string[] | undefined }
+    params?: { id: string }
+    searchParams?: { [key: string]: string | string[] | undefined }
   }
 
   export type Model = {

@@ -12,18 +12,22 @@ import CreateAudio from "../database/models/createAudio.model"
 import redis from "../redis"
 import { prosaApiKey } from "@/constans"
 import Speech from "../database/models/speech.model"
-import { revalidateCache } from "../cache"
+import { getCachedOrDB, revalidateCache } from "../cache"
+import { getToken } from "@/constans/getToken"
 
 const TTL = 3600
 
-export async function getAudios(query?: string) {
+export async function getAudios(query?: string, page = 1, limit = 9) {
 
-    const CACHE_KEY = query
-        ? `audios:query:${query.toLowerCase().trim()}`
-        : 'audios:all'
+
+
+    const baseKey = query ? `audios:query:${query.toLowerCase().trim()}` : 'audios:all';
+    const CACHE_KEY = `${baseKey}:page:${page}:limit:${limit}`;
+
     try {
         await dbConnect()
         
+        const skip = (page - 1) * limit
         const cachedResult = await redis.get(CACHE_KEY)
         if (cachedResult) {
             
@@ -47,6 +51,8 @@ export async function getAudios(query?: string) {
         const getAllAudios = await Speech.find(conditions)
             .populate({ path: 'author', model: User, select: '-password -role' })
             .sort({ createdAt: 'desc' })
+            .skip(skip)
+            .limit(limit)
         // const getAllAudios = await CreateAudio.find(conditions)
         //     .populate({ path: 'author', model: User, select: '-password -role' })
         //     .sort({ createdAt: 'desc' })
@@ -60,10 +66,16 @@ export async function getAudios(query?: string) {
     }
 }
 
-export async function createAudio({ audio, userid }: paramsForAudio) {
+export async function createAudio({ audio }: paramsForAudio) {
 
     try {
         await dbConnect()
+
+        const tokenData = await getToken()
+
+        if(!tokenData) throw new Error('Unauthorized')
+
+        const userid = tokenData.id
  
 
         const { job_id } = await submitItsRequest(audio.description, 'opus', audio.gender)
@@ -174,6 +186,8 @@ export async function createAudio({ audio, userid }: paramsForAudio) {
         // })
 
         // return JSON.parse(JSON.stringify(saveTaskId))
+
+        
        
 
     } catch (error) {
@@ -188,21 +202,28 @@ export async function getAudioBySlug(slug: string) {
     const CACHE_KEY = `audio:slug:${slug}`
 
     try {
-        await dbConnect()
 
-        const cached = await redis.get(CACHE_KEY);
-        if (cached) {
-            return JSON.parse(cached);
-        }
-        const audioBySlug = await Speech.findOne({ slug })
-            .populate({ path: 'author', model: User, select: '-password -role' })
+        return getCachedOrDB(CACHE_KEY, async () => {
+            await dbConnect()
+            const audioBySlug = await Speech.findOne({ slug })
+                .populate({ path: 'author', model: User, select: '-password -role' })
 
-        if(audioBySlug) {
-            await redis.setex(CACHE_KEY, TTL, JSON.stringify(audioBySlug))
             return JSON.parse(JSON.stringify(audioBySlug))
-        }
+        }) 
+
+        // const cached = await redis.get(CACHE_KEY);
+        // if (cached) {
+        //     return JSON.parse(cached);
+        // }
+        // const audioBySlug = await Speech.findOne({ slug })
+        //     .populate({ path: 'author', model: User, select: '-password -role' })
+
+        // if(audioBySlug) {
+        //     await redis.setex(CACHE_KEY, TTL, JSON.stringify(audioBySlug))
+        //     return JSON.parse(JSON.stringify(audioBySlug))
+        // }
         
-        return null;            
+        // return null;            
 
         
     } catch (error) {
@@ -211,9 +232,15 @@ export async function getAudioBySlug(slug: string) {
     
 }
 
-export async function updateAudio({ userid, audio, audioSlug }: paramsForAudio) {
+export async function updateAudio({ audio, audioSlug }: paramsForAudio) {
     try {
         await dbConnect()
+
+        const tokenData = await getToken()
+
+        if(!tokenData) throw new Error('Unauthorized')
+
+        const userid = tokenData.id
 
         const findAudiotoUpdate = await Speech.findOne({ slug: audioSlug })
         
@@ -245,7 +272,11 @@ export async function updateAudio({ userid, audio, audioSlug }: paramsForAudio) 
         const updatedAudio = await Speech.findOneAndUpdate(filter, update, { new: true })
 
 
-        revalidatePath(`/audio/${audioSlug}`)
+        await redis.del(`audio:slug:${audioSlug}`);
+
+       
+
+        revalidatePath(`/audio/${audioSlug}`);
         
 
         return JSON.parse(JSON.stringify(updatedAudio))
@@ -284,12 +315,6 @@ export async function deleteAudio(audioSlug: string) {
         await revalidateCache({ slug: audioSlug, authorNip })
         revalidatePath('/');
 
-        // return {
-        //     success: true,
-        //     deletedAudio: JSON.parse(JSON.stringify(deletedAudio)),
-        //     deletedTask: JSON.parse(JSON.stringify(deletedTask)),
-        // };
-
         return JSON.parse(JSON.stringify(deletedAudio))
         
     } catch(e) {
@@ -299,31 +324,22 @@ export async function deleteAudio(audioSlug: string) {
 
 export async function getAudioByAuthor(nip: string) {
     const CACHE_KEY = `audio:author:${nip}`
-   
+    
     try {
-        await dbConnect()
-
-        const cachedAudios = await redis.get(CACHE_KEY);
-        if (cachedAudios) {
-            return JSON.parse(cachedAudios);
-        }
-
-        const getAuthorByNip = await User.findOne({ nip })
         
-        if (!getAuthorByNip) {
-            console.error("Author tidak ditemukan")
-            throw new Error("gagal")
-        }
+        return getCachedOrDB(CACHE_KEY, async () => {
+            
+            await dbConnect()
+            const getAuthorByNip = await User.findOne({ nip })
+            const userid = getAuthorByNip?._id
+            
+            
+            const audioByAuthor = await Speech.find({ author: userid })
+                .populate({ path: 'author', model: User, select: '-password -role' })
+            return JSON.parse(JSON.stringify(audioByAuthor))
+        })
 
-        const userid = getAuthorByNip._id
 
-
-        const audioByAuthor = await Speech.find({ author: userid })
-            .populate({ path: 'author', model: User, select: '-password -role' })
-
-        await redis.setex(CACHE_KEY, TTL, JSON.stringify(audioByAuthor));
-
-        return JSON.parse(JSON.stringify(audioByAuthor))
 
     } catch(e) {
         console.error(e)

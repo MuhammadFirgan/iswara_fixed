@@ -67,45 +67,60 @@ export default function page() {
   
     }
   return (
-    <section className="p-10">
+    <section className="p-10 overflow-hidden w-full">
         {message && <CustomAlert message={message} status={status} />}
         <h1 className="text-xl mb-10">Tambah User Baru</h1>
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <CustomForm 
-                    control={form.control}
-                    type={FieldType.INPUT}
-                    name="fullName"
-                    label="Nama Lengkap"
-                    placeholder="Nama Lengkap.."
-                />
-                <CustomForm 
-                    control={form.control}
-                    type={FieldType.INPUT}
-                    name="email"
-                    label="Email"
-                    placeholder="Email.."
-                />
-                <CustomForm 
-                    control={form.control}
-                    type={FieldType.INPUT}
-                    name="nip"
-                    label="NIP"
-                    placeholder="NIP..."
-                />
-                <CustomForm 
-                    control={form.control}
-                    type={FieldType.SELECT}
-                    name="role"
-                    label="Status"
-                    placeholder="Pilih status"
-                >
-                    {roles?.map((role: any) => (
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+                <div className="flex flex-col w-full sm:flex-row gap-5">
+                    <div className="flex-1">
+                        <CustomForm 
+                            control={form.control}
+                            type={FieldType.INPUT}
+                            name="fullName"
+                            label="Nama Lengkap"
+                            placeholder="Nama Lengkap.."
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <CustomForm 
+                            control={form.control}
+                            type={FieldType.INPUT}
+                            name="email"
+                            label="Email"
+                            placeholder="Email.."
+                        />
+                    </div>
+                    
+                    
+                </div>
+                <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="flex-1">
+                        <CustomForm 
+                            control={form.control}
+                            type={FieldType.INPUT}
+                            name="nip"
+                            label="NIP"
+                            placeholder="NIP..."
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <CustomForm 
+                            control={form.control}
+                            type={FieldType.SELECT}
+                            name="role"
+                            label="Status"
+                            placeholder="Pilih status"
+                        >
+                            {roles?.map((role: any) => (
 
-                        <SelectItem key={role?._id} value={role?._id} className="bg-zinc-900 border-none text-white">{role?.name === 'admin' ? 'Operator' : 'Guru'}</SelectItem>
-                    ))}
-                
-                </CustomForm>
+                                <SelectItem key={role?._id} value={role?._id} className="bg-zinc-900 border-none text-white">{role?.name === 'admin' ? 'Operator' : 'Guru'}</SelectItem>
+                            ))}
+                        
+                        </CustomForm>
+                    </div>
+                    
+                </div>
                 <CustomForm 
                     control={form.control}
                     type={FieldType.PASSWORD}

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { getAllModel } from "@/lib/actions/audio.action";
 import { Model } from "@/types";
+import { Skeleton } from "../ui/skeleton";
 
 type DropdownProps = {
   value?: string;
@@ -39,12 +40,9 @@ export default function GenderOptions({ value, onChangeHandler, disabled }: Drop
       index === self.findIndex((m) => m.voice === model.voice)
   );
 
-  useEffect(() => {
-    console.log("value from props:", value);
-    console.log("available options:", uniqueVoices.map(v => v.name));
-  }, [uniqueVoices, value]);
+  
 
-  if (!models.length) return <div>Loading models...</div>;
+  if (!models.length) return <Skeleton className="h-4 w-[250px]" />;
 
   
   const selectedModel = uniqueVoices.find((m) => m.name === value);

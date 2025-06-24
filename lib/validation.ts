@@ -16,7 +16,8 @@ export const createFormValidation = z.object({
         .min(2, 'Plih jenis kelamin')
         .max(400, 'Pilih jenis kelamin'),
     'thumbnail': z
-        .string()
+        .string({ required_error: "Thumbnail wajib di upload" })
+        .min(1,"Thumbnail wajib di upload")
 })
 
 export const loginFormValidation = z.object({

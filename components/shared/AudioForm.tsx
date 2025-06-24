@@ -62,7 +62,6 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
 
                 const newAudio = await createAudio({
                     audio: {...values},
-                    userid
                     
                 })
                 if(newAudio) {
@@ -89,7 +88,6 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
 
             try {
                 const updatedAudio = await updateAudio({
-                    userid,
                     audio: {...values},
                     audioSlug
                 })
@@ -155,8 +153,8 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
                         <FormItem>
                             <FormControl>
                             </FormControl>
-                                <FileUpload onFieldChange={field.onChange}/>
-                            <FormMessage />
+                                <FileUpload value={field.value} onFieldChange={field.onChange}/>
+                            <FormMessage className="text-sm text-red-500"/>
                         </FormItem>
                     )}
                 />

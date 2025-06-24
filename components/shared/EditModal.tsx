@@ -73,9 +73,9 @@ export default function EditModal({ user } : { user: updateUserProps}) {
         <DialogTrigger>
             <Badge variant="warning">Ubah</Badge>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="bg-neutral-950 border-none">
             <>
-                <h1 className="text-xl mb-10">Tambah User Baru</h1>
+                <h1 className="text-xl mb-10">Ubah User</h1>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <CustomForm 

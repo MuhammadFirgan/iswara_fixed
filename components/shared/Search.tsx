@@ -39,7 +39,7 @@ export default function Search() {
   }, [query, searchParams, router]);
 
   return (
-    <div className="lg:w-1/2 relative z-20 w-60">
+    <div className="relative z-20">
       
       <Input
         type="text"

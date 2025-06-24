@@ -31,3 +31,16 @@ export async function revalidateCache({ slug, authorNip }: RevalidateCacheParams
         console.error(error)
     }
 }
+
+export async function getCachedOrDB(cacheKey: string, dbQuery: () => Promise<any>) {
+  const cached = await redis.get(cacheKey)
+
+  if(cached) return JSON.parse(cached)
+
+  const result = await dbQuery()
+
+  await redis.setex(cacheKey, 3600, JSON.stringify(result))
+
+  return result
+
+}

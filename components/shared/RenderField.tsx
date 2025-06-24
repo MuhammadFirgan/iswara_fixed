@@ -44,7 +44,7 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                     
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
-                        <Textarea placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none" disabled={props.disabled || false} />
+                        <Textarea placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none w-full" disabled={props.disabled || false} />
                     </FormControl>
                     <FormMessage className="text-sm text-red-500" />
                 
@@ -58,10 +58,10 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
                         <Select defaultValue={field.value} onValueChange={field.onChange}>
-                            <SelectTrigger className="shad-select-trigger bg-zinc-900 border-none">
+                            <SelectTrigger className="shad-select-trigger bg-zinc-900 border-none w-full">
                                 <SelectValue placeholder={props.placeholder}  />
                             </SelectTrigger>
-                            <SelectContent className="shad-select-content bg-zinc-900 border-none">
+                            <SelectContent className="shad-select-content bg-zinc-900 border-none w-full">
                                 {props.children}
                             </SelectContent>
                         </Select>
@@ -75,7 +75,7 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                 <>
                     
                     <FormControl>
-                        <Input id="picture" type="file"  placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none" />
+                        <Input id="picture" type="file"  placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none w-full" />
                         
                     </FormControl>
                     <FormMessage className="text-sm text-red-500" />

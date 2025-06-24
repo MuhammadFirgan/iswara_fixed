@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Loader } from "lucide-react";
 
 interface UploadFileProps {
+  value?: string
   onFieldChange: (fileUrl: String) => void
 }
 
@@ -41,7 +42,7 @@ export default function FileUpload({ onFieldChange }: UploadFileProps) {
       <div
         {...getRootProps()}
         className="justify-center items-center bg-neutral-900 flex h-72 cursor-pointer flex-col overflow-hidden rounded-xl bg-grey-50 text-center">
-        <input {...getInputProps()} className="cursor-pointer" required />
+        <input {...getInputProps()} className="cursor-pointer" />
 
         <div className="flex justify-center items-center flex-col py-5 text-grey-500 fill-white">
           <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 24 24" fill="currentColor"><path d="M11 15h2V9h3l-4-5-4 5h3z"></path><path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z"></path></svg>
