@@ -8,6 +8,7 @@ import { createUserProps, UploadFileProps, UserProps } from '@/types';
 import { revalidatePath } from 'next/cache';
 import redis from '../redis';
 import { getCachedOrDB } from '../cache';
+import { getToken } from '@/constans/getToken';
 
 
 type PaginationProps = {
@@ -17,6 +18,7 @@ type PaginationProps = {
 
 
 export async function createUser(user: createUserProps) {
+  
   try {
     await dbConnect();
 
@@ -27,6 +29,11 @@ export async function createUser(user: createUserProps) {
       ...user,
       password: hashedPassword,
     });
+
+    const keys = await redis.keys('authors:all:*');
+    if (keys.length) {
+        await redis.del(...keys); 
+    }
 
     revalidatePath('/admin/management')
 
@@ -41,9 +48,10 @@ export async function createUser(user: createUserProps) {
 export async function getAllUser({ page = 1, limit = 10 }: PaginationProps) {
 
   const skip = (page - 1) * limit
+  const CACHE_KEY = `authors:all:page:${page}:limit:${limit}`;
   try {
 
-    return getCachedOrDB('authors:all', async () => {
+    return getCachedOrDB(CACHE_KEY, async () => {
       await dbConnect()
 
       const [users, totalCount] = await Promise.all([
@@ -124,10 +132,13 @@ export async function uploadImageUser({ id, url }: UploadFileProps) {
   try {
     await dbConnect()
 
-    const uploadImage = await User.findOneAndUpdate({
-      _id: id,
-      photo: url
-    })
+    const uploadImage = await User.findOneAndUpdate(
+      { _id: id },
+      { $set: { photo: url } },
+      { new: true },
+    )
+
+    revalidatePath(`/profile/${id}`)
 
     return JSON.parse(JSON.stringify(uploadImage))
 
@@ -139,18 +150,27 @@ export async function uploadImageUser({ id, url }: UploadFileProps) {
 export async function updateUser({id, user}: { id: string, user: UserProps }) {
  
 
-  const { fullName, email, role } = user
+  const { fullName, email, nip, role } = user
+  const token = await getToken()
+  const roleName = token?.role
   try {
     await dbConnect()
 
-    const updateUser = await User.findOneAndUpdate({
-      _id: id,
-      fullName,
-      email,
-      role
-    })
+    if(roleName !== "admin") throw new Error("Anda bukan Admin")
+     
+    const updateUser = await User.findOneAndUpdate(
+      {_id: id},
+      { $set: { fullName, email, nip, role } },
+      { new: true }
+    )
 
     if (!updateUser) throw new Error('User update failed')
+
+    const keys = await redis.keys('authors:all:*')
+    if (keys.length) {
+      await redis.del(...keys)
+    }
+    await redis.del(`author:${id}`)
 
     revalidatePath('/admin/management')
     return JSON.parse(JSON.stringify(updateUser))

@@ -40,7 +40,9 @@ export default function page() {
             ...userFormValidation,
             fullName: '',
             email: '',
-            nip: ''
+            nip: '',
+            role: '',
+            password: ''
         },
     })
     

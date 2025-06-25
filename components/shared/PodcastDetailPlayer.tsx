@@ -75,7 +75,8 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
     userToken()
    }, [])
 
-   const isOwner = token === (userid?._id?.toString());
+//    const isOwner = token === (userid?._id?.toString());
+    const isOwner = token === userid;
 
   return (
     <div className="flex items-center gap-2">
@@ -132,40 +133,11 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
                                                 )}
                                            
                                             </Button>
-                                            {/* <DialogClose asChild>
-                                            </DialogClose> */}
+                                    
                                         </div>
                                     </DialogContent>
                                 </Dialog>
-                                {/* <div onClick={() => handleDelete(audio.slug)}>
-                                </div> */}
-
-                                {/* <Dialog>
-                                    <ContextMenu>
-                                        <ContextMenuTrigger>Right click</ContextMenuTrigger>
-                                        <ContextMenuContent>
-                                        <ContextMenuItem>Open</ContextMenuItem>
-                                        <ContextMenuItem>Download</ContextMenuItem>
-                                        <DialogTrigger asChild>
-                                            <ContextMenuItem>
-                                            <span>Delete</span>
-                                            </ContextMenuItem>
-                                        </DialogTrigger>
-                                        </ContextMenuContent>
-                                    </ContextMenu>
-                                    <DialogContent>
-                                        <DialogHeader>
-                                        <DialogTitle>Are you absolutely sure?</DialogTitle>
-                                        <DialogDescription>
-                                            This action cannot be undone. Are you sure you want to permanently
-                                            delete this file from our servers?
-                                        </DialogDescription>
-                                        </DialogHeader>
-                                        <DialogFooter>
-                                        <Button type="submit">Confirm</Button>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog> */}
+                               
 
                             </TooltipTrigger>
                             <TooltipContent className="bg-white">

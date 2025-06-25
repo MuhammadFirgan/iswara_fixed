@@ -20,7 +20,6 @@ const TTL = 3600
 export async function getAudios(query?: string, page = 1, limit = 9) {
 
 
-
     const baseKey = query ? `audios:query:${query.toLowerCase().trim()}` : 'audios:all';
     const CACHE_KEY = `${baseKey}:page:${page}:limit:${limit}`;
 
@@ -44,19 +43,12 @@ export async function getAudios(query?: string, page = 1, limit = 9) {
                 ]
             };
         }
-        
 
-
-        // console.time("check audios")
         const getAllAudios = await Speech.find(conditions)
             .populate({ path: 'author', model: User, select: '-password -role' })
-            .sort({ createdAt: 'desc' })
+            .sort({ _creationTime: -1 })
             .skip(skip)
             .limit(limit)
-        // const getAllAudios = await CreateAudio.find(conditions)
-        //     .populate({ path: 'author', model: User, select: '-password -role' })
-        //     .sort({ createdAt: 'desc' })
-        // console.timeEnd("check audios")
 
         await redis.setex(CACHE_KEY, TTL, JSON.stringify(getAllAudios));
 
@@ -107,6 +99,11 @@ export async function createAudio({ audio }: paramsForAudio) {
             duration: audioDuration,
             author: userid
         })
+
+        const keys = await redis.keys('audios:all:*');
+        if (keys.length) {
+            await redis.del(...keys); 
+        }
         await revalidateCache({ slug, authorNip: userid })
         revalidatePath('/')
 

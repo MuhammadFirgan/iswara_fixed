@@ -84,10 +84,10 @@ export interface createUserProps {
     keysToRemove: string[]
   }
 
-  export type SearchParamProps = {
-    params?: { id: string }
-    searchParams?: { [key: string]: string | string[] | undefined }
-  }
+  // export type SearchParamProps = {
+  //   params?: Record<string, string>;
+  //   searchParams?: Record<string, string | string[] | undefined>;
+  // };
 
   export type Model = {
     name: string;

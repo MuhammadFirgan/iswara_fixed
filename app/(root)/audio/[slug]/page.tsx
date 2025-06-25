@@ -1,5 +1,4 @@
 import NotFound from "@/app/not-found";
-import PhoneRinging from "@/components/shared/PhoneRinging";
 import PodcastDetailPlayer from "@/components/shared/PodcastDetailPlayer";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,7 @@ export default async function page({ params }: { params: Promise<{ slug: string 
               {audioBySlug.title}
             </h1>
             
-            {/* <PhoneRinging name={audioBySlug.author.fullName} avatar={audioBySlug.author.photo} audio_url={audioBySlug.audio} /> */}
+          
             <PodcastDetailPlayer audio={audioBySlug} userid={audioBySlug.author} />
           </div>
         </div>

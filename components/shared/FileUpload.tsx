@@ -29,7 +29,6 @@ export default function FileUpload({ onFieldChange }: UploadFileProps) {
         onFieldChange(res[0].url)
       }
 
-      console.log(res)
     } catch(e) {
       console.error(e)
     }

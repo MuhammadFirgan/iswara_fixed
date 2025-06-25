@@ -71,7 +71,7 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
                 toast({ title: "Berhasil membuat audio", variant: 'success' })
            
             } catch(e: any) {
-                console.log(e)
+                console.error(e)
                 // setIsError('Gagal Membuat Musik')
                 toast({ title: "Gagal membuat audio", variant: "destructive" })
                 

@@ -2,12 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .bg-primary {
-  @apply bg-gradient-to-r from-green-600 to-green-800 text-white;
+  @apply bg-gradient-to-r from-green-600 to-green-800 text-white hover:from-emerald-400 hover:to-cyan-400;
 }
 
 .text-primary {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-800
+}
+
+.glass-effect {
+  @apply bg-white/10 border border-white/10 backdrop-blur-xl shadow-xl transition-transform duration-200;
+}
+.glass-effect:hover {
+  @apply bg-white/15 border-cyan-400/30 -translate-y-0.5;
+  box-shadow: 0 12px 40px rgba(0,212,255,0.15); /* Custom shadow can also use Tailwind box-shadow utility */
+}
+
+.hologram-effect {
+  @apply relative;
+}
+.hologram-effect::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(0,212,255,0.1) 50%, transparent 70%);
+  animation: hologram 3s linear infinite;
+  pointer-events: none;
+}
+@keyframes hologram {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .glassmorphism-black {
@@ -15,4 +40,6 @@
   backdrop-filter: blur(37px);
   -webkit-backdrop-filter: blur(37px);
 }
+
+
 

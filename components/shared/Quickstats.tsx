@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import LogoutButton from "./LogoutButton";
+import Image from "next/image";
 
 
 interface quickStatsProps {
@@ -18,8 +19,10 @@ export default function Quickstats({ name, role, total, image, token }: quickSta
     <div className="p-4 bg-gradient-to-br from-emerald-900/30 to-cyan-900/30 rounded-xl border border-emerald-500/20">
       <div className="flex items-center mb-4">
         <div className="relative">
-          <img 
-            src={image} 
+          <Image
+            width={12}
+            height={12} 
+            src={image || '/profile.jpg'} 
             alt="Profile"
             className="w-12 h-12 rounded-full object-cover border-2 border-emerald-400/50"
           />
@@ -34,7 +37,6 @@ export default function Quickstats({ name, role, total, image, token }: quickSta
           variant="ghost"
           className="p-1 h-auto text-gray-400 hover:text-emerald-300"
         >
-          {/* <Settings className="w-4 h-4" /> */}
         </Button>
       </div>
       <div className="space-y-2 mb-4">

@@ -21,11 +21,15 @@ import { getRole } from "@/lib/actions/role.action"
 import { updateUser } from "@/lib/actions/user.action"
 import { useRouter } from "next/navigation"
 import { updateUserProps } from '@/types';
+import { useToast } from "@/hooks/use-toast"
+import { Loader } from "lucide-react"
 
 export default function EditModal({ user } : { user: updateUserProps}) {
 
     const router = useRouter()
      const [ roles, setRoles ] = useState([])
+     const [isSubmiting, setIsSubmiting] = useState<boolean>(false)
+        const { toast } = useToast()
      useEffect(() => {
         const setRole = async () => {
             const response = await getRole()
@@ -58,13 +62,18 @@ export default function EditModal({ user } : { user: updateUserProps}) {
     }, [user, form])
 
     async function onSubmit(values: z.infer<typeof updateUserValidation>) {
+        setIsSubmiting(true)
         try {
             const updatedUser = await updateUser({ id: user._id, user: values })
             if(updatedUser) {
                 router.push('/admin/management')
+                router.refresh()
             }
+            toast({ title: "Berhasil mengupdate data" })
         } catch(e) {
             console.error(e)
+        } finally {
+            setIsSubmiting(false)
         }
       
     }
@@ -74,8 +83,13 @@ export default function EditModal({ user } : { user: updateUserProps}) {
             <Badge variant="warning">Ubah</Badge>
         </DialogTrigger>
         <DialogContent className="bg-neutral-950 border-none">
+            <DialogHeader>
+                <DialogTitle className="text-xl mb-2">Ubah User</DialogTitle>
+                <DialogDescription className="sr-only">
+                Formulir untuk mengubah data pengguna.
+                </DialogDescription>
+            </DialogHeader>
             <>
-                <h1 className="text-xl mb-10">Ubah User</h1>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <CustomForm 
@@ -114,7 +128,18 @@ export default function EditModal({ user } : { user: updateUserProps}) {
                             ))}
                         
                         </CustomForm>
-                        <Button type="submit" className="bg-primary w-full">Kirim</Button>
+                        <Button type="submit" className={`bg-primary w-full ${isSubmiting ? 'bg-green-300 hover:cursor-not-allowed text-black' : ''}`} disabled={isSubmiting}>
+                        {isSubmiting ? (
+                            <>
+                                memproses
+                                <Loader size={20} className="animate-spin ml-2" />
+                            </>
+                        ) : (
+                            <>
+                                Simpan
+                            </>
+                        )}
+                </Button>
                     </form>
                 </Form>
             </>

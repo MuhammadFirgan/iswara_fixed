@@ -2,7 +2,6 @@
 import { getAudios } from '@/lib/actions/audio.action'
 import { useEffect, useRef, useState } from 'react'
 import Card from './Card'
-import { CustomSkeleton } from './CustomSkeleton'
 
 export default function AudioList({ initialData, query }: { initialData: any[], query?: string }) {
     const [audios, setAudios] = useState(initialData)
@@ -10,7 +9,7 @@ export default function AudioList({ initialData, query }: { initialData: any[], 
     const [loading, setLoading] = useState(false)
     const loadingRef = useRef<HTMLDivElement | null>(null)
 
-    
+
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -51,7 +50,7 @@ export default function AudioList({ initialData, query }: { initialData: any[], 
                 audios.map((audio: any, i: number)  => (
                 <Card 
                     key={i} 
-                    image={audio.thumbnail} 
+                    image={audio.thumbnail && audio.thumbnail.trim() !== '' ? audio.thumbnail : '/profile.jpg'} 
                     title={audio.title} 
                     name={audio.author.fullName} 
                     profile={audio.author.photo} 

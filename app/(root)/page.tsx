@@ -6,15 +6,15 @@ import Card from "@/components/shared/Card";
 import { CustomSkeleton } from "@/components/shared/CustomSkeleton";
 import Trending from "@/components/shared/Trending";
 import { getAudios } from "@/lib/actions/audio.action";
-import { SearchParamProps } from "@/types";
+// import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import { Suspense } from "react";
 
 
-export default async function page({ searchParams }: SearchParamProps) {
-  const params = await searchParams
+export default async function page({ params }: { params: Promise<{ query: string }> }) {
 
-  const query = (params?.query as string) || ''
+  // const query = (searchParams?.query as string) || ''
+  const { query } = await params
 
   const audios = await getAudios(query || undefined)  
   return (
