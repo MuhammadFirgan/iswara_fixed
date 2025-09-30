@@ -1,4 +1,5 @@
-import { z } from "zod";
+import z from "zod";
+
 
 
 export const createFormValidation = z.object({
@@ -16,7 +17,7 @@ export const createFormValidation = z.object({
         .min(2, 'Plih jenis kelamin')
         .max(400, 'Pilih jenis kelamin'),
     'thumbnail': z
-        .string({ required_error: "Thumbnail wajib di upload" })
+        .string()
         .min(1,"Thumbnail wajib di upload")
 })
 
