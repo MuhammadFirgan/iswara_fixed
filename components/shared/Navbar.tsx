@@ -27,16 +27,6 @@ export default function Navbar({ name, image, role, token } : barProps) {
           </div>
         </div>
 
-        {/* <div className="flex-1 max-w-2xl mx-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search videos..."
-              className="pl-10 glass border-border/40 focus:border-primary transition-colors"
-            />
-          </div>
-        </div> */}
         <SearchInput />
         {token ? (
           <div className="flex items-center gap-4">
@@ -57,13 +47,7 @@ export default function Navbar({ name, image, role, token } : barProps) {
               <UserPopover name={name} image={image} role={role} token={token} />
             </PopoverContent>
           </Popover>
-          {/* <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full w-9 h-9 bg-gradient-to-br from-primary to-accent"
-          >
-            
-          </Button> */}
+          
         </div>
         ) : (
           <div className="flex items-center gap-4">

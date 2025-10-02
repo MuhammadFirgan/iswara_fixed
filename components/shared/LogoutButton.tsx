@@ -50,7 +50,7 @@ export default function LogoutButton() {
     // </div>
     <Button 
       variant="ghost"
-      className="w-full text-gray-400 hover:text-red-400 hover:bg-red-900/20 text-sm"
+      className="w-full bg-red-500 hover:bg-red-900/20 text-sm"
       size="sm"
       onClick={() => fetchData()}
       disabled={isLoading}
