@@ -21,13 +21,14 @@ export default async function page({ params }: { params: Promise<{ query: string
   return (
     
     // <section className="flex flex-col lg:flex-row w-full pt-5 overflow-hidden">
-    <section className="container px-4 py-8">
+    <section className="w-full lg:container px-4 lg:py-8">
 
       <div className="flex items-center gap-2 mb-4">
         <Sparkles className="w-6 h-6 text-accent" />
         <h2 className="text-2xl font-bold">Dengarkan AI Bercerita</h2>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> */}
+      <div className="flex flex-col lg:flex-row gap-6">
         <AudioList initialData={audios} query={query}/>
       </div>
       {audios && audios.length > 0 ? (
