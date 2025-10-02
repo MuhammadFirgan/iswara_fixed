@@ -1,5 +1,5 @@
 import MobileNav from "@/components/shared/MobileNav";
-import Search from "@/components/shared/Search";
+import Search from "@/components/shared/SearchInput";
 import Sidebar from "@/components/shared/Sidebar";
 import Topbar from "@/components/shared/Topbar";
 import { getToken } from "@/constans/getToken";

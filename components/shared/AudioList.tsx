@@ -43,9 +43,8 @@ export default function AudioList({ initialData, query }: { initialData: any[], 
     }, [loading, page, query])
 
   return (
-    <>
-    
-        <div className="flex justify-center gap-4 sm:gap-5 sm:justify-normal flex-wrap pt-10 lg:min-h-screen ">
+    <div className='w-full lg:w-[calc(100%-300px)]'>
+        <div className="flex justify-center gap-4 sm:gap-5 flex-wrap pt-10 lg:min-h-screen ">
             {audios && audios.length > 0 ? (
                 audios.map((audio: any, i: number)  => (
                 <Card 
@@ -63,6 +62,6 @@ export default function AudioList({ initialData, query }: { initialData: any[], 
             
         </div>
         <div ref={loadingRef}></div>
-    </>
+    </div>
   )
 }
