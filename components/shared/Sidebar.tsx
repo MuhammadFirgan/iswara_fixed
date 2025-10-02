@@ -7,7 +7,7 @@ import LogoutButton from './LogoutButton';
 
 import Image from 'next/image';
 import { barProps } from '@/app/(root)/layout';
-import Search from './Search';
+import Search from './SearchInput';
 import Quickstats from './Quickstats';
 import { Button } from '../ui/button';
 

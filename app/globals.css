@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-.bg-primary {
+/* .bg-primary {
   @apply bg-gradient-to-r from-green-600 to-green-800 text-white hover:from-emerald-400 hover:to-cyan-400;
 }
 
@@ -16,7 +16,7 @@
 }
 .glass-effect:hover {
   @apply bg-white/15 border-cyan-400/30 -translate-y-0.5;
-  box-shadow: 0 12px 40px rgba(0,212,255,0.15); /* Custom shadow can also use Tailwind box-shadow utility */
+  box-shadow: 0 12px 40px rgba(0,212,255,0.15); 
 }
 
 .hologram-effect {
@@ -39,7 +39,48 @@
   background: rgba(18, 18, 18, 0.64);
   backdrop-filter: blur(37px);
   -webkit-backdrop-filter: blur(37px);
+} */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, hsl(222 47% 4%) 0%, hsl(222 47% 6%) 50%, hsl(222 47% 4%) 100%);
+    background-attachment: fixed;
+  }
 }
 
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
 
+  .glass-hover {
+    transition: all 0.3s ease;
+  }
+
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(175 70% 41%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+  }
+
+  .bg-primary {
+    @apply bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-400 hover:to-blue-400;
+  }
+}
 

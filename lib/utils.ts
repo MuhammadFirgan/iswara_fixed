@@ -65,6 +65,13 @@ export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryPara
   )
 }
 
+export const getInitial = (name: string) => {
+  const words = name.trim().split(' ');
+  const firstLetter = words[0]?.[0] || ''; 
+  const secondLetter = words[1]?.[0] || ''; 
+  return firstLetter + secondLetter;
+}
+
 // export async function getCachedOrDB(cacheKey: string, dbQuery: () => Promise<any>) {
 //   const cached = await redis.get(cacheKey)
 

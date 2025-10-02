@@ -99,4 +99,13 @@ export interface createUserProps {
     channels: number;
     samplerate: number;
   };
+
+  export type barProps = {
+    name: string
+    total?: string
+    image: string
+    role: string
+    token: object | string
+    type?: 'first' | 'second'
+  }
  

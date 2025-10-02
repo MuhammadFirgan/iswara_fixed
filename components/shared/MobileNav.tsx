@@ -14,7 +14,7 @@ import Image from "next/image";
 import { barProps } from "@/app/(root)/layout";
 import Quickstats from "./Quickstats";
 import { Button } from "../ui/button";
-import Search from "./Search";
+import Search from "./SearchInput";
 
   
 
