@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <AudioProvider>
         <body
-          className={`${poppins.className} antialiased  bg-black  text-white relative`}
+          className={`${poppins.className} antialiased  text-white `}
         >
           
         {children}

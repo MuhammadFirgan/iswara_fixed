@@ -1,7 +1,8 @@
 
 import MobileNav from "@/components/shared/MobileNav";
+import Navbar from "@/components/shared/Navbar";
 import PodcastPlayer from "@/components/shared/PodcastPlayer";
-import Search from "@/components/shared/Search";
+import Search from "@/components/shared/SearchInput";
 import Sidebar from "@/components/shared/Sidebar";
 import Topbar from "@/components/shared/Topbar";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,14 +13,7 @@ import User from "@/lib/database/models/user.model";
 
 
 
-export type barProps = {
-  name: string
-  total: string
-  image: string
-  role: string
-  token: object | string
-  type: 'first' | 'second'
-}
+
 
 
 export default async function layout({
@@ -57,9 +51,14 @@ export default async function layout({
     
 
   return (
-    <main className="">
-      <div className="flex">
-        <div className='hidden md:block fixed left-0 bottom-0 min-h-screen z-[9999]'>
+    <main>
+        <Navbar 
+          name={name} 
+          image={image} 
+          token={tokenData} 
+          role={roleName} 
+        />
+        {/* <div className='hidden md:block fixed left-0 bottom-0 min-h-screen z-[9999]'>
           <Sidebar 
             name={name} 
             image={image} 
@@ -67,10 +66,11 @@ export default async function layout({
             token={tokenData} 
             role={roleName} 
             type="second"/>
-        </div>
-        <section className='flex min-h-screen flex-col relative w-full sm:ml-[280px]'>
-          <div className="md:hidden flex justify-between items-center p-4">
-            <h1>iSWARA</h1>
+        </div> */}
+        {/* <section className='flex min-h-screen flex-col relative w-full'> */}
+        <section className=''>
+          {/* <div className="md:hidden flex justify-between items-center p-4">
+ 
             <MobileNav 
               name={name} 
               image={image} 
@@ -78,12 +78,11 @@ export default async function layout({
               token={tokenData} 
               role={roleName} 
               type="second"/>
-          </div>
+          </div> */}
           {children}
           
           <Toaster />
         </section>
-      </div>
       <PodcastPlayer />
     </main>
    

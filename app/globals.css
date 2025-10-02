@@ -2,7 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-
+@layer base {
+  :root {
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 6%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 6%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 4%;
+    --secondary: 217 20% 15%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 20% 15%;
+    --muted-foreground: 217 10% 60%;
+    --accent: 175 70% 41%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 20% 15%;
+    --input: 217 20% 15%;
+    --ring: 217 91% 60%;
+    --radius: 0.5rem;
+  }
+}
 /* .bg-primary {
   @apply bg-gradient-to-r from-green-600 to-green-800 text-white hover:from-emerald-400 hover:to-cyan-400;
 }
