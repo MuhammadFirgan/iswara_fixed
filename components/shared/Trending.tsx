@@ -1,4 +1,5 @@
 import { getAudios } from "@/lib/actions/audio.action"
+import { TrendingUp } from "lucide-react";
 import Image from "next/image"
 import Link from "next/link"
 
@@ -9,7 +10,10 @@ export default async function Trending() {
   return (
     <div className="lg:fixed lg:right-0 lg:bottom-20 lg:top-20 lg:min-h-screen lg:w-[300px] glass border-border/40 px-4 py-8 lg:h-screen sm:overflow-y-auto sm:no-scrollbar ">
       {/* <div className="px-4 py-8 sm:min-h-screen sm:w-[350px] sm:bg-neutral-900 rounded mr-5"> */}
-        <h1 className="mb-4">Trending</h1>
+        <div className="flex items-center gap-3">
+          <TrendingUp className="w-5 h-5 text-accent" />
+          <h1 className="mb-4">Trending</h1>
+        </div>
         { audios && audios.length > 0 && (
           <div className="glass glass-hover p-3 w-full rounded-lg">
             <Link href={`/audio/${audios[randomIndex].slug}`} >

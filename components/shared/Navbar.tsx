@@ -1,4 +1,4 @@
-import { AudioWaveform, Search, SquarePlus, User } from "lucide-react";
+import { AudioWaveform, Search, SquarePlus, Upload, User } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/popover"  
 import { barProps } from "@/types";
 import UserPopover from "./UserPopover";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import CreateAudioModal from "./CreateAudioModal";
 
 
 export default function Navbar({ name, image, role, token } : barProps) {
@@ -30,15 +32,35 @@ export default function Navbar({ name, image, role, token } : barProps) {
         <SearchInput />
         {token ? (
           <div className="flex items-center gap-4">
-          <Button className="bg-primary rounded-lg" asChild>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="bg-primary rounded-lg">
+                <SquarePlus className="w-8 h-8 md:w-5 md:h-5" />
+                <span className="hidden md:block">Tambah Audio</span>
+                
+              </Button>
+            </DialogTrigger>
+            <CreateAudioModal />
+            {/* <DialogContent className="glass border-border/40">
+              <DialogHeader>
+                <DialogTitle className="text-2xl flex items-center gap-2">
+                  <Upload className="w-6 h-6 text-accent" />
+                  Tambahkan Audio Baru
+                </DialogTitle>
+                <DialogDescription>
+                  Isi form dibawah ini untuk menambahkan audio baru
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent> */}
+          </Dialog>
+          
+          {/* <Button className="bg-primary rounded-lg" asChild>
             <Link href="/audio/create">
                 <SquarePlus className="w-8 h-8 md:w-5 md:h-5" />
                 <span className="hidden md:block">Tambah Audio</span>
             </Link>
-            {/* <Badge className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 bg-accent">
-              3
-            </Badge> */}
-          </Button>
+            
+          </Button> */}
           <Popover>
             <PopoverTrigger>
               <User className="w-5 h-5" />
