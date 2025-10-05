@@ -16,9 +16,10 @@ import { getToken } from "@/constans/getToken";
 import { deleteAudio } from "@/lib/actions/audio.action";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Loader } from "lucide-react";
+import { FileText, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AudioForm from "./AudioForm";
+import { PdfViewerModal } from "./PdfViewerModal";
 
   
 
@@ -168,8 +169,28 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+
           </>
         )}
+          <TooltipProvider>
+              <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link href="/soal.pdf" target="_blank" rel="noopener noreferrer">
+                      <Image
+                        src="/icons/FileText.svg"
+                        width={64}
+                        height={64}
+                        alt="pdf"
+                        className="cursor-pointer"
+                      />
+                    </Link>
+          
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-white">
+                      <p className="text-black">Soal (PDF)</p>
+                  </TooltipContent>
+              </Tooltip>
+          </TooltipProvider>
       </div>
     </div>
   )
