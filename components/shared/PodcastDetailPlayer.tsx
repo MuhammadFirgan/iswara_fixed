@@ -15,9 +15,10 @@ import { useEffect, useState } from "react";
 import { getToken } from "@/constans/getToken";
 import { deleteAudio } from "@/lib/actions/audio.action";
 import { useRouter } from "next/navigation";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import AudioForm from "./AudioForm";
 
   
 
@@ -80,78 +81,96 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
 
   return (
     <div className="flex items-center gap-2">
-        <Button className="max-w-sm bg-primary rounded-3xl w-full py-3" onClick={handleClick}>Mainkan</Button>
-        <div className="flex gap-3">
-            {userid  && (
-                <>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <Link href={`/audio/${audio.slug}/edit`}>
-                                    <Image src="/icons/edit.svg" width={64} height={64} alt="edit"/>
-                                </Link>
-                            </TooltipTrigger>
-                            <TooltipContent className="bg-white">
-                            <p className="text-black">Edit Music</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <Dialog>
-                                    <DialogTrigger>
-                                        <Image src="/icons/delete.svg" width={64} height={64} alt="delete"/>
-                                    </DialogTrigger>
-                                    <DialogContent className="bg-neutral-950">
-                                        <DialogTitle>Konfirmasi Penghapusan</DialogTitle>
-                                        <DialogDescription>
-                                        
-                                            Apakah Anda yakin ingin menghapus audio ini?
-                                        </DialogDescription>
-                                        
+      <Button className="max-w-sm bg-primary rounded-3xl w-full py-3" onClick={handleClick}>
+        Mainkan
+      </Button>
+      <div className="flex gap-3">
+        {userid && (
+          <>
+            {/* Mengganti Link dengan Dialog untuk Edit */}
+            <Dialog>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DialogTrigger asChild>
+                      <Image
+                        src="/icons/edit.svg"
+                        width={64}
+                        height={64}
+                        alt="edit"
+                        className="cursor-pointer"
+                      />
+                    </DialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-white">
+                    <p className="text-black">Edit Music</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-                                        <div className="flex justify-end gap-3 mt-4">
-                                            <DialogClose asChild>
-                                                <Button variant="outline">Batal</Button>
-                                            </DialogClose>
-                                            <Button
-                                                
-                                                onClick={() => handleDelete(audio.slug)}
-                                                className={`bg-red-500 hover:bg-red-400 ${isDeleting ? 'bg-red-300 hover:cursor-not-allowed text-black' : ''}`} 
-                                                disabled={isDeleting}
-                                            >
-                                                {isDeleting ? (
-                                                    <>
-                                                        memproses
-                                                        <Loader size={20} className="animate-spin ml-2" />
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        Hapus
-                                                    </>
-                                                )}
-                                           
-                                            </Button>
-                                    
-                                        </div>
-                                    </DialogContent>
-                                </Dialog>
-                               
+              <DialogContent className="glass border-border/40 overflow-y-auto max-h-[90vh]">
+                <DialogHeader>
+                  <DialogTitle>Edit Audio</DialogTitle>
+                  <DialogDescription>
+                    Anda dapat mengubah judul, deskripsi, dan model suara.
+                  </DialogDescription>
+                </DialogHeader>
+                {/* Meletakkan AudioForm di sini */}
+                <AudioForm type="update" audioSlug={audio.slug} userid={userid} />
+              </DialogContent>
+            </Dialog>
 
-                            </TooltipTrigger>
-                            <TooltipContent className="bg-white">
-                            <p className="text-black">Hapus Music</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-
-                </>
-            )}
-            
-            
-            
-        </div>
+            {/* Dialog untuk Hapus (kode yang sudah ada) */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Image
+                        src="/icons/delete.svg"
+                        width={64}
+                        height={64}
+                        alt="delete"
+                        className="cursor-pointer"
+                      />
+                    </DialogTrigger>
+                    <DialogContent className="bg-neutral-950">
+                      <DialogTitle>Konfirmasi Penghapusan</DialogTitle>
+                      <DialogDescription>
+                        Apakah Anda yakin ingin menghapus audio ini?
+                      </DialogDescription>
+                      <div className="flex justify-end gap-3 mt-4">
+                        <DialogClose asChild>
+                          <Button variant="outline">Batal</Button>
+                        </DialogClose>
+                        <Button
+                          onClick={() => handleDelete(audio.slug)}
+                          className={`bg-red-500 hover:bg-red-400 ${isDeleting ? 'bg-red-300 hover:cursor-not-allowed text-black' : ''}`}
+                          disabled={isDeleting}
+                        >
+                          {isDeleting ? (
+                            <>
+                              memproses
+                              <Loader size={20} className="animate-spin ml-2" />
+                            </>
+                          ) : (
+                            <>
+                              Hapus
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </TooltipTrigger>
+                <TooltipContent className="bg-white">
+                  <p className="text-black">Hapus Music</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </>
+        )}
+      </div>
     </div>
   )
 }
