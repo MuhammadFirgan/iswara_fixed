@@ -52,24 +52,5 @@ export default function SearchInput() {
         />
       </div>
     </div>
-    // <div className="relative z-20">
-      
-    //   <Input
-    //     type="text"
-    //     value={query} 
-    //     onChange={(e) => setQuery(e.target.value)} 
-    //     className="bg-zinc-900 border-none rounded-full lg:w-full px-4 py-6 text-white"
-    //     placeholder="Cari audio..."
-    //   />
-
-      
-    //   <Image
-    //     src="/icons/search.svg"
-    //     width={6}
-    //     height={6}
-    //     alt="icon search"
-    //     className="absolute right-5 top-3 w-6 h-6"
-    //   />
-    // </div>
   );
 }

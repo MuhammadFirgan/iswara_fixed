@@ -70,13 +70,13 @@ export default function ResetPassword() {
                     label="Password Baru"
                     placeholder="Masukkan password baru..."
                   />
-                  <button
+                  <Button
                     type="button"
                     
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
                   >
                     {/* {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />} */}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -91,13 +91,13 @@ export default function ResetPassword() {
                     label="Ulangi password"
                     placeholder="ulangi password..."
                   />
-                  <button
+                  {/* <Button
                     type="button"
                     
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
                   >
-                    {/* {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />} */}
-                  </button>
+                    {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </Button> */}
                 </div>
               </div>
 

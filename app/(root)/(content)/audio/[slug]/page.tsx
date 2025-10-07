@@ -76,9 +76,9 @@ export default async function page({ params }: { params: Promise<{ slug: string 
             </div>
         </div>
       </div>
-      <Suspense fallback={<CustomSkeleton />}>
+      {/* <Suspense fallback={<CustomSkeleton />}>
         <Trending />
-      </Suspense>
+      </Suspense> */}
       
     </section>
   )

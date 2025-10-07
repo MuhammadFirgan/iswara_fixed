@@ -25,7 +25,9 @@ export default function Navbar({ name, image, role, token } : barProps) {
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center glow">
               <AudioWaveform className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-xl font-bold gradient-text hidden md:block">Iswara</h1>
+            <Link href="/">
+              <h1 className="text-xl font-bold gradient-text hidden md:block">Iswara</h1>
+            </Link>
           </div>
         </div>
 
@@ -40,27 +42,11 @@ export default function Navbar({ name, image, role, token } : barProps) {
                 
               </Button>
             </DialogTrigger>
-            <CreateAudioModal />
-            {/* <DialogContent className="glass border-border/40">
-              <DialogHeader>
-                <DialogTitle className="text-2xl flex items-center gap-2">
-                  <Upload className="w-6 h-6 text-accent" />
-                  Tambahkan Audio Baru
-                </DialogTitle>
-                <DialogDescription>
-                  Isi form dibawah ini untuk menambahkan audio baru
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent> */}
+            <CreateAudioModal token={token as string}/>
+         
           </Dialog>
           
-          {/* <Button className="bg-primary rounded-lg" asChild>
-            <Link href="/audio/create">
-                <SquarePlus className="w-8 h-8 md:w-5 md:h-5" />
-                <span className="hidden md:block">Tambah Audio</span>
-            </Link>
-            
-          </Button> */}
+          
           <Popover>
             <PopoverTrigger>
               <User className="w-5 h-5" />

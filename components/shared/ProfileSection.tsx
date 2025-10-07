@@ -31,7 +31,7 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
   
 
   return (
-    <section className="pb-10">
+    <section className="pb-10 w-full glass">
 
       <div className="rounded-2xl p-2 cyber-border">
         <div className="flex flex-wrap gap-2">
@@ -57,9 +57,9 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
         </div>
       </div>
 
-      <div className="animate-fade-in">
+      <div className="animate-fade-in ">
         {activeTab === 'profile' && (
-          <div className="space-y-8">
+          <div className="space-y-8 flex flex-col md:flex-row">
             <div className="hologram-effect rounded-2xl p-8 cyber-border">
               <h3 className="text-2xl font-semibold text-white mb-6 flex items-center space-x-3 justify-center sm:justify-start">
               {/* <Camera className="w-6 h-6 text-green-500" /> */}
@@ -81,57 +81,57 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
             </div>
 
           {/* Personal Information */}
-          <div className="glassmorphism-black rounded-2xl p-8 cyber-border">
-              <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-semibold text-white flex items-center space-x-3">
-                      <User className="w-6 h-6 text-green-500" />
-                      <span>Personal Information</span>
-                  </h3>
-              </div>
+            <div className="glassmorphism-black rounded-2xl p-8 cyber-border">
+                <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-2xl font-semibold text-white flex items-center space-x-3">
+                        <User className="w-6 h-6 text-green-500" />
+                        <span>Personal Information</span>
+                    </h3>
+                </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Full Name */}
-              <div className="space-y-2">
-                  <Label className="block text-sm font-medium text-gray-300">Full Name</Label>
-                  <div className="relative">
-                  
-                    <Input
-                        type="text"
-                        value={user.fullName}
-                        disabled
-                        className="shad-input bg-black border-none w-full"
-                    />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Full Name */}
+                <div className="space-y-2">
+                    <Label className="block text-sm font-medium text-gray-300">Full Name</Label>
+                    <div className="relative">
+                    
+                      <Input
+                          type="text"
+                          value={user.fullName}
+                          disabled
+                          className="shad-input bg-black border-none w-full"
+                      />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label className="block text-sm font-medium text-gray-300">Email</Label>
+                    <div className="relative">
+                    
+                      <Input
+                          type="text"
+                          value={user.email}
+                          disabled
+                          className="shad-input bg-black border-none w-full"
+                      />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label className="block text-sm font-medium text-gray-300">Nip</Label>
+                    <div className="relative">
+                    
+                      <Input
+                          type="text"
+                          value={user.nip}
+                          disabled
+                          className="shad-input bg-black border-none w-full"
+                      />
+                    </div>
+                </div>
+                
+
               </div>
-              <div className="space-y-2">
-                  <Label className="block text-sm font-medium text-gray-300">Email</Label>
-                  <div className="relative">
-                  
-                    <Input
-                        type="text"
-                        value={user.email}
-                        disabled
-                        className="shad-input bg-black border-none w-full"
-                    />
-                  </div>
-              </div>
-              <div className="space-y-2">
-                  <Label className="block text-sm font-medium text-gray-300">Nip</Label>
-                  <div className="relative">
-                  
-                    <Input
-                        type="text"
-                        value={user.nip}
-                        disabled
-                        className="shad-input bg-black border-none w-full"
-                    />
-                  </div>
-              </div>
-              
 
             </div>
-
-          </div>
           </div>
         )}
         {activeTab === 'security' && <ResetPassword />}
