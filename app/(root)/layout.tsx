@@ -58,27 +58,7 @@ export default async function layout({
           token={tokenData} 
           role={roleName} 
         />
-        {/* <div className='hidden md:block fixed left-0 bottom-0 min-h-screen z-[9999]'>
-          <Sidebar 
-            name={name} 
-            image={image} 
-            total={totalAudio.toString()} 
-            token={tokenData} 
-            role={roleName} 
-            type="second"/>
-        </div> */}
-        {/* <section className='flex min-h-screen flex-col relative w-full'> */}
         <section className=''>
-          {/* <div className="md:hidden flex justify-between items-center p-4">
- 
-            <MobileNav 
-              name={name} 
-              image={image} 
-              total={totalAudio.toString()} 
-              token={tokenData} 
-              role={roleName} 
-              type="second"/>
-          </div> */}
           {children}
           
           <Toaster />

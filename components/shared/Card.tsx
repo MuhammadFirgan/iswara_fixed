@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Card({ image, title, name, profile, slug, nip }: CardProps) {
   return (
-    <div className="group relative w-48 md:w-52 rounded overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 glass glass-hover p-2 h-72 md:h-80">
+    <div className="group relative w-44 md:w-52 rounded overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 glass glass-hover p-2 h-72 md:h-80">
       <Link href={`/audio/${slug}`}>
         <Image
           src={image && image.trim() !== '' ? image : '/profile.jpg'}

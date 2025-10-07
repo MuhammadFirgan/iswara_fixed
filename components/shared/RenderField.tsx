@@ -23,7 +23,7 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                 <>
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
-                        <Input placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none w-full" />
+                        <Input placeholder={props.placeholder} {...field} className="glass border-border/40 w-full" />
                     </FormControl>
                     <FormMessage className="text-sm text-red-500"/>
                 </>
@@ -33,7 +33,7 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                 <>
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
-                        <Input placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none" type="password" />
+                        <Input placeholder={props.placeholder} {...field} className="glass border-border/40" type="password" />
                     </FormControl>
                     <FormMessage className="text-sm text-red-500" />
                 </>
@@ -44,7 +44,7 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                     
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
-                        <Textarea placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none w-full" disabled={props.disabled || false} />
+                        <Textarea placeholder={props.placeholder} {...field} className="glass border-border/40 w-full" disabled={props.disabled || false} />
                     </FormControl>
                     <FormMessage className="text-sm text-red-500" />
                 
@@ -75,7 +75,7 @@ export default function RenderField({ field, props }: { field: any, props: Custo
                 <>
                     
                     <FormControl>
-                        <Input id="picture" type="file"  placeholder={props.placeholder} {...field} className="shad-input bg-zinc-900 border-none w-full" />
+                        <Input id="picture" type="file"  placeholder={props.placeholder} {...field} className="glass border-border/40 w-full" />
                         
                     </FormControl>
                     <FormMessage className="text-sm text-red-500" />
