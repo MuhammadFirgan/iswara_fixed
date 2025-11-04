@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation'
 import LogoutButton from './LogoutButton';
 
 import Image from 'next/image';
-import { barProps } from '@/app/(root)/layout';
 import Search from './SearchInput';
 import Quickstats from './Quickstats';
 import { Button } from '../ui/button';
+import { barProps } from '@/types';
 
 
 export default function Sidebar({ name, total, image, role, token, type = "second" } : barProps) {
@@ -82,6 +82,8 @@ export default function Sidebar({ name, total, image, role, token, type = "secon
              
               <div className="px-5">
                 {token ? (
+
+                  // @ts-ignore
                   <Quickstats name={name} role={role} image={image} total={total} token={token}/>
                 ) : (
                   <Button asChild className="rounded-full bg-primary w-full">

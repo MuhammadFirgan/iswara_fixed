@@ -42,6 +42,7 @@ export default function Navbar({ name, image, role, token } : barProps) {
                 
               </Button>
             </DialogTrigger>
+            {/* @ts-ignore */}
             <CreateAudioModal token={token as string}/>
          
           </Dialog>
