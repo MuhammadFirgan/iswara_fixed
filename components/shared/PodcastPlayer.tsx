@@ -23,8 +23,7 @@ const PodcastPlayer = () => {
       if (audioElement.paused) {
         // Coba putar audio. Tangani jika browser memblokir
         audioElement.play().catch(error => {
-          console.error("Autoplay was prevented:", error);
-          // Mungkin perlu menampilkan pesan kepada pengguna untuk berinteraksi lebih lanjut
+          console.error("Autoplay was prevented (User interaction needed):", error);
         });
       } else {
         audioElement.pause();
@@ -92,37 +91,53 @@ const PodcastPlayer = () => {
   const handlePlay = () => setIsPlaying(true);
   const handlePause = () => setIsPlaying(false);
 
+  // --- HANDLER BARU: Coba Putar Otomatis Setelah Data Cukup ---
+  const handleCanPlay = () => {
+    const audioElement = audioRef.current;
+    if (audioElement) {
+        // Jika sebelumnya bukan sedang bermain, coba putar otomatis
+        // Ini adalah kesempatan kedua untuk mencoba autoplay setelah pemuatan berhasil.
+        if (audioElement.paused) {
+            audioElement.play().catch(error => {
+                console.warn("Autoplay diblokir setelah CanPlay. Menunggu interaksi pengguna.");
+            });
+        }
+    }
+  };
+
   // --- Logika Pembaruan Audio/Source (Kritis) ---
   useEffect(() => {
     const audioElement = audioRef.current;
     
     if (audioElement) {
         
-      // 1. CLEANUP (Selalu pause dan reset, ini akan menghentikan fetching yang sedang berjalan)
-      audioElement.pause();
-      audioElement.currentTime = 0;
-      setIsPlaying(false);
+      // Cek apakah URL audio berubah
+      const isUrlChanged = audioElement.src !== audio?.url;
 
-      if (audio?.url) {
-        // 2. KONTROL SRC DI JAVASCRIPT (Kritis untuk menghindari race condition DOM)
+      if (audio?.url && isUrlChanged) {
+        
+        // 1. CLEANUP (Hentikan pemutaran lama)
+        audioElement.pause();
+        audioElement.currentTime = 0;
+        setIsPlaying(false);
+
+        // 2. KONTROL SRC DI JAVASCRIPT
         audioElement.src = audio.url;
         
         // 3. LOAD BARU
+        // Ini memicu event 'canplay' setelah pemuatan data yang cukup.
         audioElement.load();
         
-        // 4. COBA PUTAR
-        audioElement.play().then(() => {
-          // Sukses (isPlaying akan diatur oleh onPlay)
-        }).catch(error => {
-          // Gagal (browser memblokir autoplay)
-          console.warn("Autoplay diblokir, menunggu interaksi pengguna.");
-        });
+        // CATATAN: Pemanggilan play() dihapus dari sini
+        // agar browser memiliki waktu untuk memproses URL yang aneh.
 
-      } else {
-        // Jika URL tidak ada, hapus sumbernya
+      } else if (!audio?.url && audioElement.src) {
+        // Jika URL dihapus, bersihkan elemen
+        audioElement.pause();
         audioElement.src = "";
         setDuration(0);
         setCurrentTime(0);
+        setIsPlaying(false);
       }
     }
   }, [audio]);
@@ -149,6 +164,7 @@ const PodcastPlayer = () => {
           onEnded={handleAudioEnded}
           onPlay={handlePlay}    // Set isPlaying = true
           onPause={handlePause}  // Set isPlaying = false
+          onCanPlay={handleCanPlay} // Coba putar otomatis setelah data siap
         />
 
         <div className="flex items-center gap-4 max-md:hidden">
