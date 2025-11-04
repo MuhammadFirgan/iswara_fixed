@@ -67,9 +67,9 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
                 })
                 if(newAudio) {
                     router.push('/')
+                    toast({ title: "Berhasil membuat audio", variant: 'success' })
                 }
 
-                toast({ title: "Berhasil membuat audio", variant: 'success' })
            
             } catch(e: any) {
                 console.error(e)
