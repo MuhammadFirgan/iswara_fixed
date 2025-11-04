@@ -3,7 +3,7 @@
 import { Model, paramsForAudio } from "@/types"
 import { dbConnect } from "../database"
 import Audio from "../database/models/audio.model"
-import { formatTime, generateSlug, getDuration } from "../utils"
+import { formatTime, generateRandomDuration, generateRandomId, generateSlug, getDuration } from "../utils"
 import User from "../database/models/user.model"
 import {  queryTtsResult, saveAudioToUT, submitItsRequest } from "../helpers/audio"
 import { revalidatePath } from "next/cache"
@@ -70,23 +70,24 @@ export async function createAudio({ audio }: paramsForAudio) {
         const userid = tokenData.id
  
 
-        const { job_id } = await submitItsRequest(audio.description, 'opus', audio.gender)
+        // const { job_id } = await submitItsRequest(audio.description, 'opus', audio.gender)
        
         
-        // const job_id = "068319a8-04f1-7a4d-8000-43aa8b09cd27"
-        const resultBuffer = await queryTtsResult(job_id)
+        const job_id = generateRandomId()
+        // const resultBuffer = await queryTtsResult(job_id)
 
-        const audioBuffer = resultBuffer.audioBuffer
-        const audioDuration = resultBuffer.duration as number
+        // const audioBuffer = resultBuffer.audioBuffer
+        // const audioDuration = resultBuffer.duration as number
        
 
-        const uint8Array = new Uint8Array(audioBuffer);
-        const blob = new Blob([uint8Array], { type: "audio/mpeg" })
+        // const uint8Array = new Uint8Array(audioBuffer);
+        // const blob = new Blob([uint8Array], { type: "audio/mpeg" })
 
-        const getAudioUrl = await saveAudioToUT(blob)
+        // const getAudioUrl = await saveAudioToUT(blob)
 
         const slug = generateSlug(audio.title)
-        // const duration = formatTime(audioDuration)
+        const audioDuration = generateRandomDuration()
+        const urlPerempuan= "https://4igyvchkki.ufs.sh/f/snODQ15hNpetHfkTSB9YtLlF8KOWcU9BSxrn5aEi10ZyoQ7H"
 
         const newAudio = await Speech.create({
             job_id,
@@ -94,7 +95,7 @@ export async function createAudio({ audio }: paramsForAudio) {
             description: audio.description,
             slug,
             tts_model: audio.gender,
-            url: getAudioUrl,
+            url: urlPerempuan,
             thumbnail: audio.thumbnail,
             duration: audioDuration,
             author: userid
@@ -308,6 +309,9 @@ export async function deleteAudio(audioSlug: string) {
         // const deletedTask = await CreateAudio.findOneAndDelete({ slug: audioSlug });
 
         const authorNip = audioDoc.author?.nip
+
+        await redis.del(`audio:${audioSlug}`)
+        await redis.del("audios:all");
 
         await revalidateCache({ slug: audioSlug, authorNip })
         revalidatePath('/');

@@ -32,6 +32,19 @@ export const voiceTypes = [
     },
 ]
 
+export const tentativeVoices = [
+    {
+        id: 1,
+        voice: "Bethari",
+        as: "Perempuan"
+    },
+    {
+        id: 2,
+        voice: "Bayu",
+        as: "Laki-laki"
+    }
+]
+
 export const userId = process.env.PLAYHT_USER_ID
 export const secretKey = process.env.PLAYHT_SECRET_KEY
 export const newSecretKey = process.env.SUNOAI_SECRET_KEY
