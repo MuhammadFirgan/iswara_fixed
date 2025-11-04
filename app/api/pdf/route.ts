@@ -49,7 +49,11 @@ export async function GET() {
 
   const pdfBytes = await pdfDoc.save();
 
-  return new NextResponse(pdfBytes, {
+  // --- PERBAIKAN: Bungkus Uint8Array dengan Buffer ---
+  // NextResponse dapat menginterpretasikan Buffer sebagai badan respons biner yang valid.
+  const buffer = Buffer.from(pdfBytes);
+
+  return new NextResponse(buffer, {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": "inline; filename=worksheet.pdf",
