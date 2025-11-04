@@ -25,7 +25,7 @@ export default async function layout({children}: {children: React.ReactNode}) {
           ) : null}
           <Toaster />
       </section>
-      <PodcastPlayer />
+    
     </main>
   )
 }

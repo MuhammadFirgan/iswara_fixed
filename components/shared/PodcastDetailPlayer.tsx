@@ -82,7 +82,7 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <Button className="max-w-sm bg-primary rounded-3xl w-full py-3" onClick={() => setAudio(audio)}>
+      <Button className="max-w-sm bg-primary rounded-3xl w-full py-3" onClick={handleClick}>
         Mainkan
       </Button>
       <div className="flex gap-3">
