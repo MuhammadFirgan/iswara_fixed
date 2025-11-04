@@ -53,9 +53,9 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
             if(deletedAudio) {
                 router.push("/")
                 router.refresh()
+                toast({ title: "Audio berhasil dihapus", variant: 'success' })
             }
 
-            toast({ title: "Audio berhasil dihapus", variant: 'success' })
         } catch(e) {
             console.error(e)
             toast({ title: "Audio gagal dihapus", variant: "destructive" })
@@ -82,7 +82,7 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <Button className="max-w-sm bg-primary rounded-3xl w-full py-3" onClick={handleClick}>
+      <Button className="max-w-sm bg-primary rounded-3xl w-full py-3" onClick={() => setAudio(audio)}>
         Mainkan
       </Button>
       <div className="flex gap-3">

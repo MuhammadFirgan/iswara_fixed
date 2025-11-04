@@ -27,9 +27,9 @@ export default async function Album({ params }: { params: Promise<{ nip: string 
               </div>
               <div className="flex flex-col gap-2">
                 <h1 className="text-2xl font-bold">
-                  {audiosByAuthor[0].author.fullName}'s Album
+                  Album {audiosByAuthor[0].author.fullName}
                 </h1>
-                <span className="text-sm lg:text-zinc-600">{audiosByAuthor.length} Audios</span>
+                <span className="text-sm lg:text-zinc-600">{audiosByAuthor.length} Audio</span>
         
               </div>
               

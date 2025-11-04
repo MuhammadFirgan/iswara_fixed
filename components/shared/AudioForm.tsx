@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import FileUpload from "@/components/shared/FileUpload"
 import GenderOptions from "./GenderOptions"
 import { useToast } from "@/hooks/use-toast"
+import { Input } from "../ui/input"
 
 
 export default function AudioForm({ userid, type = "create", audioSlug }: { userid: string; type: 'create' | 'update', audioSlug?: string; }) {
@@ -129,7 +130,10 @@ export default function AudioForm({ userid, type = "create", audioSlug }: { user
                     placeholder="Masukkan text.."
                     disabled={type === "update"}
                 />
+
                 
+                
+                <input type="hidden" name="getAudioUrl" value="https://4igyvchkki.ufs.sh/f/snODQ15hNpetHfkTSB9YtLlF8KOWcU9BSxrn5aEi10ZyoQ7H" />
                 
                 <FormField
                     control={form.control}

@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import qs from 'query-string'
 import { RemoveUrlQueryParams, UrlQueryParams } from "@/types"
+import { v4 as uuidv4 } from 'uuid';
 import redis from "./redis"
 
 
@@ -70,6 +71,28 @@ export const getInitial = (name: string) => {
   const firstLetter = words[0]?.[0] || ''; 
   const secondLetter = words[1]?.[0] || ''; 
   return firstLetter + secondLetter;
+}
+
+export function generateRandomDuration(): string {
+
+  const minSeconds = 60; 
+  
+  const maxSeconds = 239; 
+
+  const randomTotalSeconds = Math.floor(Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
+
+  const minutes = Math.floor(randomTotalSeconds / 60);
+  const seconds = randomTotalSeconds % 60;
+
+  const formattedMinutes = String(minutes).padStart(2, '0');
+  const formattedSeconds = String(seconds).padStart(2, '0');
+
+  return `${formattedMinutes}:${formattedSeconds}`;
+}
+
+export function generateRandomId(): string {
+ 
+  return uuidv4();
 }
 
 // export async function getCachedOrDB(cacheKey: string, dbQuery: () => Promise<any>) {
