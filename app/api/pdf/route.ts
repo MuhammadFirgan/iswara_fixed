@@ -31,21 +31,16 @@ export async function GET() {
   drawText("Kelas: _________ ");
 
   y -= 30;
-  drawText("1. Siapa tokoh utama dalam cerita ini?");
-  drawText("2. Apa yang dilakukan tokoh utama?");
-  drawText("3. Apa masalah yang terjadi dalam cerita?");
-  drawText("4. Bagaimana cerita ini berakhir?");
+  drawText("1. Siapa nama tokoh utama dalam cerita yang kamu dengar?");
+  drawText("2. Siapa saja teman atau musuh tokoh utama?");
+  drawText("3. Dimana tempat kejadian cerita itu?");
+  drawText("4. Kapan cerita itu terjadi?");
 
   y -= 30;
-  drawText("5. Menurutmu, apakah tokoh utama orang baik? Mengapa?");
-  drawText("6. Apa yang bisa kamu pelajari dari cerita ini?");
-  drawText("7. Kalau kamu ada di cerita ini, kamu mau jadi siapa? Kenapa?");
-
-  y -= 30;
-
-  drawText("8. Kalau cerita ini terjadi di zaman sekarang, seperti apa ya?");
-  drawText("9. Coba ubah akhir cerita dengan versi kamu sendiri!");
-  drawText("10. Tulis pesan atau surat pendek untuk tokoh utama!");
+  drawText("5. Apa masalah yang dialami tokoh utama");
+  drawText("6. Bagaimana cara tokoh utama menyelesaikan masalahnya");
+  drawText("7. Apa pesan yang dapat dipetik dari cerita tersebut");
+  drawText("8. Coba ceritakan kembali isi cerita dengan kata-katamu sendiri");
 
   const pdfBytes = await pdfDoc.save();
 

@@ -8,7 +8,7 @@ export default async function Trending() {
     const audios = await getAudios()
     const randomIndex = audios ? Math.floor(Math.random() * audios.length) : 0;
   return (
-    <div className="lg:fixed lg:right-0 lg:bottom-20 lg:top-20 lg:min-h-screen lg:w-[300px] glass border-border/40 px-4 py-8 lg:h-screen sm:overflow-y-auto sm:no-scrollbar ">
+    <div className="lg:fixed lg:right-0 lg:bottom-0 lg:top-20 lg:min-h-screen lg:w-[300px] glass border-border/40 px-4 py-8 lg:h-screen sm:overflow-y-auto sm:no-scrollbar ">
       {/* <div className="px-4 py-8 sm:min-h-screen sm:w-[350px] sm:bg-neutral-900 rounded mr-5"> */}
         <div className="flex items-center gap-3">
           <TrendingUp className="w-5 h-5 text-accent" />

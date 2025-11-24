@@ -75,12 +75,10 @@ export async function createAudio({ audio }: paramsForAudio) {
         const userid = tokenData.id
  
 
-        // ... (Logika pembuatan audio)
-
         const job_id = generateRandomId()
         const slug = generateSlug(audio.title)
-        const audioDuration = generateRandomDuration()
-        const urlPerempuan= "https://4igyvchkki.ufs.sh/f/snODQ15hNpetHfkTSB9YtLlF8KOWcU9BSxrn5aEi10ZyoQ7H"
+        const audioDuration = "04:47"
+        const urlPerempuan= "https://4igyvchkki.ufs.sh/f/snODQ15hNpeti1BGz1x5GLQhKnCHXU2J16FykVTwvzfqOjSZ"
 
         const newAudio = await Speech.create({
             job_id,
