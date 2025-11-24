@@ -35,8 +35,6 @@ export async function GET() {
   drawText("2. Siapa saja teman atau musuh tokoh utama?");
   drawText("3. Dimana tempat kejadian cerita itu?");
   drawText("4. Kapan cerita itu terjadi?");
-
-  y -= 30;
   drawText("5. Apa masalah yang dialami tokoh utama");
   drawText("6. Bagaimana cara tokoh utama menyelesaikan masalahnya");
   drawText("7. Apa pesan yang dapat dipetik dari cerita tersebut");
