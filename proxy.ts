@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const data = request.cookies.get('token')?.value;
 
   const token = jwt.decode(data!) as JwtPayload

@@ -1,7 +1,7 @@
 import { Redis } from 'ioredis';
 
 // Pastikan variabel lingkungan REDIS_URL sudah disetel di Vercel
-const redisUrl = process.env.REDIS_ENDPOINT; 
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL; 
 
 if (!redisUrl) {
     console.warn('REDIS_URL not found. Caching will be skipped.');
