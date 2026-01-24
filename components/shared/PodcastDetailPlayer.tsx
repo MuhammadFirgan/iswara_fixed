@@ -175,7 +175,8 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
           <TooltipProvider>
               <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link href="/soal.pdf" target="_blank" rel="noopener noreferrer">
+                    {/* <Link href="/soal.pdf" target="_blank" rel="noopener noreferrer"> */}
+                    <Link href="/api/pdf" target="_blank" rel="noopener noreferrer">
                       <Image
                         src="/icons/FileText.svg"
                         width={64}

@@ -1,4 +1,3 @@
-
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,15 +15,21 @@ const PodcastPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0); 
   const { audio } = useAudio();
 
+  // --- Handlers Pemutaran ---
 
   const togglePlayPause = () => {
-    if (audioRef.current?.paused) {
-      audioRef.current?.play();
-      setIsPlaying(true);
-    } else {
-      audioRef.current?.pause();
-      setIsPlaying(false);
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      if (audioElement.paused) {
+        // Coba putar audio. Tangani jika browser memblokir
+        audioElement.play().catch(error => {
+          console.error("Autoplay was prevented (User interaction needed):", error);
+        });
+      } else {
+        audioElement.pause();
+      }
     }
+    // State isPlaying akan diatur oleh event DOM (onPlay/onPause)
   };
 
   const toggleMute = () => {
@@ -50,6 +55,9 @@ const PodcastPlayer = () => {
     }
   };
 
+  // --- Event Listeners untuk Sinkronisasi State ---
+  
+  // Memperbarui waktu saat ini
   useEffect(() => {
     const updateCurrentTime = () => {
       if (audioRef.current) {
@@ -69,26 +77,68 @@ const PodcastPlayer = () => {
 
   const handleLoadedMetadata = () => {
     if (audioRef.current && !isNaN(audioRef.current.duration)) {
-      console.log("audioref : ", audioRef.current)
       setDuration(audioRef.current.duration);
+      // Atur currentTime menjadi 0 saat metadata baru dimuat (reset)
+      audioRef.current.currentTime = 0;
+      setCurrentTime(0);
     }
   };
 
   const handleAudioEnded = () => {
     setIsPlaying(false);
   };
+  
+  const handlePlay = () => setIsPlaying(true);
+  const handlePause = () => setIsPlaying(false);
 
+  // --- HANDLER BARU: Coba Putar Otomatis Setelah Data Cukup ---
+  const handleCanPlay = () => {
+    const audioElement = audioRef.current;
+    if (audioElement) {
+        // Jika sebelumnya bukan sedang bermain, coba putar otomatis
+        // Ini adalah kesempatan kedua untuk mencoba autoplay setelah pemuatan berhasil.
+        if (audioElement.paused) {
+            audioElement.play().catch(error => {
+                console.warn("Autoplay diblokir setelah CanPlay. Menunggu interaksi pengguna.");
+            });
+        }
+    }
+  };
+
+  // --- Logika Pembaruan Audio/Source (Kritis) ---
   useEffect(() => {
     const audioElement = audioRef.current;
-    if (audio?.url) {
-      if (audioElement) {
-        audioElement.play().then(() => {
-          setIsPlaying(true);
-        });
+    
+    if (audioElement) {
+        
+      // Cek apakah URL audio berubah
+      const isUrlChanged = audioElement.src !== audio?.url;
+
+      if (audio?.url && isUrlChanged) {
+        
+        // 1. CLEANUP (Hentikan pemutaran lama)
+        audioElement.pause();
+        audioElement.currentTime = 0;
+        setIsPlaying(false);
+
+        // 2. KONTROL SRC DI JAVASCRIPT
+        audioElement.src = audio.url;
+        
+        // 3. LOAD BARU
+        // Ini memicu event 'canplay' setelah pemuatan data yang cukup.
+        audioElement.load();
+        
+        // CATATAN: Pemanggilan play() dihapus dari sini
+        // agar browser memiliki waktu untuk memproses URL yang aneh.
+
+      } else if (!audio?.url && audioElement.src) {
+        // Jika URL dihapus, bersihkan elemen
+        audioElement.pause();
+        audioElement.src = "";
+        setDuration(0);
+        setCurrentTime(0);
+        setIsPlaying(false);
       }
-    } else {
-      audioElement?.pause();
-      setIsPlaying(false);
     }
   }, [audio]);
 
@@ -105,22 +155,27 @@ const PodcastPlayer = () => {
       />
 
       <section className="glass flex h-[112px] w-full items-center justify-between px-4 max-md:justify-center max-md:gap-5 md:px-12">
+        {/* Elemen AUDIO: Hapus atribut 'src' dari JSX */}
         <audio
           ref={audioRef}
-          src={audio?.url}
+          // src={audio?.url} <-- DIHAPUS DARI SINI
           className="hidden"
           onLoadedMetadata={handleLoadedMetadata}
           onEnded={handleAudioEnded}
+          onPlay={handlePlay}    // Set isPlaying = true
+          onPause={handlePause}  // Set isPlaying = false
+          onCanPlay={handleCanPlay} // Coba putar otomatis setelah data siap
         />
 
         <div className="flex items-center gap-4 max-md:hidden">
-          <Link href={`/podcast/${audio?.slug}`}>
+          {/* Mengarahkan ke halaman detail audio */}
+          <Link href={`/audio/${audio?.slug}`}>
             <Image
               src={audio?.thumbnail! || "/images/player1.png"}
               width={64}
               height={64}
-              alt="player1"
-              className="aspect-square rounded-xl"
+              alt="player thumbnail"
+              className="aspect-square rounded-xl object-cover"
             />
           </Link>
           <div className="flex w-[160px] flex-col">
@@ -146,7 +201,7 @@ const PodcastPlayer = () => {
             src={isPlaying ? "/icons/pause.svg" : "/icons/play.svg"}
             width={44}
             height={44}
-            alt="play"
+            alt="play/pause"
             onClick={togglePlayPause}
           />
           <div className="flex items-center gap-1.5">

@@ -35,12 +35,12 @@ export const voiceTypes = [
 export const tentativeVoices = [
     {
         id: 1,
-        voice: "Bethari",
+        voice: "Selina",
         as: "Perempuan"
     },
     {
         id: 2,
-        voice: "Bayu",
+        voice: "Andra",
         as: "Laki-laki"
     }
 ]
