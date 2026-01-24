@@ -3,7 +3,7 @@
 import { Model, paramsForAudio } from "@/types"
 import { dbConnect } from "../database"
 import Audio from "../database/models/audio.model"
-import { formatTime, generateRandomDuration, generateRandomId, generateSlug, getDuration } from "../utils"
+import { formatTime, generateRandomDuration, generateRandomId, generateSlug, getDuration, serializeObject } from "../utils"
 import User from "../database/models/user.model"
 import {  queryTtsResult, saveAudioToUT, submitItsRequest } from "../helpers/audio"
 import { revalidatePath } from "next/cache"
@@ -30,11 +30,12 @@ export async function getAudios(query?: string, page = 1, limit = 9) {
         
         // Menggunakan .get() dari @upstash/redis
         const cachedResult = await redis.get(CACHE_KEY) 
+        // console.log("cached : ", cachedResult)
         
         if (cachedResult) {
             // @upstash/redis mengembalikan string, tidak perlu JSON.parse()
             // tapi karena Anda menyimpan JSON.stringify, kita parse lagi
-            return JSON.parse(cachedResult as string); 
+            return cachedResult; 
         }
 
         let conditions = {};
@@ -53,11 +54,13 @@ export async function getAudios(query?: string, page = 1, limit = 9) {
             .sort({ _creationTime: -1 })
             .skip(skip)
             .limit(limit)
+            .lean()
 
-        // Menggunakan .setex() dari @upstash/redis
-        await redis.setex(CACHE_KEY, TTL, JSON.stringify(getAllAudios));
+        // Menggunakan .set() dari @upstash/redis
+        await redis.set(CACHE_KEY, JSON.stringify(getAllAudios), { ex: TTL });
 
-        return JSON.parse(JSON.stringify(getAllAudios));
+//         return JSON.parse(JSON.stringify(getAllAudios));
+        return serializeObject(getAllAudios)
     } catch (error) {
         console.error(error)
     }

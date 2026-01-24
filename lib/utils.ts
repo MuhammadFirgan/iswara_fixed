@@ -95,6 +95,42 @@ export function generateRandomId(): string {
   return uuidv4();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function serializeObject(obj: any): any {
+  if (obj === null || obj === undefined) return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(serializeObject);
+  }
+
+  if (typeof obj === 'object') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const serialized: Record<string, any> = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        // Konversi ObjectId ke string
+        if (key === '_id' || key === 'author') {
+          serialized[key] = serializeObject(obj[key]);
+        } else {
+          serialized[key] = serializeObject(obj[key]);
+        }
+      }
+    }
+    return serialized;
+  }
+
+  // Jika objek punya toString() khusus (seperti ObjectId), konversi ke string
+  if (obj.toString && typeof obj.toString === 'function') {
+    const str = obj.toString();
+    // Pastikan ini benar-benar ObjectId-like (hex string 24 karakter)
+    if (/^[0-9a-fA-F]{24}$/.test(str)) {
+      return str;
+    }
+  }
+
+  return obj;
+}
+
 // export async function getCachedOrDB(cacheKey: string, dbQuery: () => Promise<any>) {
 //   const cached = await redis.get(cacheKey)
 

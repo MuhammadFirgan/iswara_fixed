@@ -1,46 +1,49 @@
-import redis from "./redis"
+// lib/cache.ts
+import redis from "./redis";
 
-const TTL = 3600
-
+const TTL = 3600;
 
 interface RevalidateCacheParams {
-  slug?: string
-  authorNip?: string
+  slug?: string;
+  authorNip?: string;
 }
 
 export async function revalidateCache({ slug, authorNip }: RevalidateCacheParams) {
-    try {
-        if (slug) {
-            await redis.del(`audio:slug:${slug}`)
-          }
-      
-          
-          await redis.del('audios:all')
-      
-          
-          const keys = await redis.keys('audios:query:*')
-          if (keys.length > 0) {
-            await redis.del(...keys)
-          }
-      
-          
-          if (authorNip) {
-            await redis.del(`audio:author:${authorNip}`)
-          }
-    } catch (error) {
-        console.error(error)
+  try {
+    if (slug) {
+      await redis.del(`audio:slug:${slug}`);
     }
+
+    await redis.del('audios:all');
+
+    const keys = await redis.keys('audios:query:*');
+    for (const key of keys) {
+      await redis.del(key); // ✅ Loop satu per satu
+    }
+
+    if (authorNip) {
+      await redis.del(`audio:author:${authorNip}`);
+    }
+  } catch (error) {
+    console.error("revalidateCache error:", error);
+  }
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getCachedOrDB(cacheKey: string, dbQuery: () => Promise<any>) {
-  const cached = await redis.get(cacheKey)
+  const cached = await redis.get(cacheKey);
 
-  if(cached) return JSON.parse(cached)
+  if (cached && typeof cached === 'string') {
+    try {
+      return JSON.parse(cached);
+    } catch (e) {
+      console.warn('Corrupted cache, ignoring:', cacheKey);
+    }
+  }
 
-  const result = await dbQuery()
+  const result = await dbQuery();
 
-  await redis.setex(cacheKey, 3600, JSON.stringify(result))
+  // ✅ Gunakan redis.set dengan opsi { ex }
+  await redis.set(cacheKey, JSON.stringify(result), { ex: TTL });
 
-  return result
-
+  return result;
 }
