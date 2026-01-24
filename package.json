@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-   
+    "dev": "next dev --turbopack",
     "postinstall": "find node_modules/@uploadthing -name '*.md' -delete && find node_modules/@uploadthing -name '*.d.cts' -delete",
     "build": "next build",
     "start": "next start",
@@ -24,7 +24,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "@react-pdf/renderer": "^4.3.1",
     "@uploadthing/react": "^7.3.3",
-    "@upstash/redis": "^1.35.6",
+    "@upstash/redis": "^1.36.1",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
