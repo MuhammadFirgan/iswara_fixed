@@ -1,30 +1,37 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { Search } from "lucide-react";
 
 export default function SearchInput() {
-  const [query, setQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
+  
+  // Ambil nilai query dari URL saat ini
+  const urlQuery = searchParams.get("query") || "";
+  
+  // Sinkronisasi state dengan URL (hanya saat URL berubah)
+  const [query, setQuery] = useState(urlQuery);
 
-  // Ambil nilai query saat ini dari URL
-  const currentQueryFromUrl = searchParams.get("query") || "";
-
-  // Sinkronisasi state dengan URL saat komponen mount atau URL berubah
+  // Update state jika URL berubah (misal: back/forward button)
   useEffect(() => {
-    setQuery(currentQueryFromUrl);
-  }, [currentQueryFromUrl]);
+    const current = searchParams.get("query") || "";
+    if (current !== query) {
+      setQuery(current);
+    }
+  }, [searchParams, query]);
 
-  // Handle perubahan input (debounced)
+  // Debounced update URL berdasarkan input
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      // Hanya push jika nilai berbeda dari yang ada di URL
-      if (query !== currentQueryFromUrl) {
-        let newUrl = "";
+    const timeout = setTimeout(() => {
+      const currentUrlQuery = searchParams.get("query") || "";
+      
+      // Hanya push jika berbeda dari URL saat ini
+      if (query !== currentUrlQuery) {
+        let newUrl;
         if (query) {
           newUrl = formUrlQuery({
             params: searchParams.toString(),
@@ -41,8 +48,8 @@ export default function SearchInput() {
       }
     }, 300);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [query, currentQueryFromUrl, searchParams, router]);
+    return () => clearTimeout(timeout);
+  }, [query, searchParams, router]);
 
   return (
     <div className="flex-1 max-w-2xl mx-8">

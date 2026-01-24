@@ -17,7 +17,12 @@ export default async function Trending() {
         { audios && audios.length > 0 && (
           <div className="glass glass-hover p-3 w-full rounded-lg">
             <Link href={`/audio/${audios[randomIndex].slug}`} >
-              <Image src={audios[randomIndex].thumbnail || ""} width={200} height={200} alt="trending" className="w-full h-56 rounded"/>
+              {audios[randomIndex].thumbnail ? (
+                <Image src={audios[randomIndex].thumbnail || ""} width={200} height={200} alt="trending" className="w-full h-56 rounded"/>
+              ) : (
+                <div className="w-full aspect-square bg-gray-200 animate-pulse" />
+              )}
+              
               <h3 className="line-clamp-2 pt-4 text-base font-bold ">{audios[randomIndex].title}</h3>
               <span className="text-xs text-gray-500">{audios[randomIndex].author.fullName}</span>
             </Link>
