@@ -1,43 +1,48 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { Search } from "lucide-react";
 
 export default function SearchInput() {
-  const [query, setQuery] = useState(""); 
-  const router = useRouter(); 
-  const searchParams = useSearchParams(); 
+  const [query, setQuery] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  
+  // Ambil nilai query saat ini dari URL
+  const currentQueryFromUrl = searchParams.get("query") || "";
+
+  // Sinkronisasi state dengan URL saat komponen mount atau URL berubah
+  useEffect(() => {
+    setQuery(currentQueryFromUrl);
+  }, [currentQueryFromUrl]);
+
+  // Handle perubahan input (debounced)
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      let newUrl = "";
-
-      if (query) {
-        
-        newUrl = formUrlQuery({
-          params: searchParams.toString(),
-          key: "query",
-          value: query,
-        });
-      } else {
-        
-        newUrl = removeKeysFromQuery({
-          params: searchParams.toString(),
-          keysToRemove: ["query"],
-        });
+      // Hanya push jika nilai berbeda dari yang ada di URL
+      if (query !== currentQueryFromUrl) {
+        let newUrl = "";
+        if (query) {
+          newUrl = formUrlQuery({
+            params: searchParams.toString(),
+            key: "query",
+            value: query,
+          });
+        } else {
+          newUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ["query"],
+          });
+        }
+        router.push(newUrl, { scroll: false });
       }
+    }, 300);
 
-      
-      router.push(newUrl, { scroll: false });
-    }, 300); 
-
-    return () => clearTimeout(delayDebounceFn); 
-  }, [query, searchParams, router]);
+    return () => clearTimeout(delayDebounceFn);
+  }, [query, currentQueryFromUrl, searchParams, router]);
 
   return (
     <div className="flex-1 max-w-2xl mx-8">
