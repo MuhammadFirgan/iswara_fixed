@@ -7,6 +7,8 @@ export default function Card({ image, title, name, profile, slug, nip }: CardPro
   return (
     <div className="group relative w-44 md:w-52 rounded overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 glass glass-hover p-2 h-72 md:h-80">
       <Link href={`/audio/${slug}`}>
+      {image? (
+
         <Image
           src={image && image.trim() !== '' ? image : '/profile.jpg'}
           alt="cover audio"
@@ -14,6 +16,9 @@ export default function Card({ image, title, name, profile, slug, nip }: CardPro
           height={200}
           className="w-full object-cover aspect-square z-10 "
         />
+      ) : (
+        <div className="w-full aspect-square bg-gray-200 animate-pulse" />
+      )}
         <h3 className="line-clamp-2 pt-4 text-sm font-bold">{title}</h3>
       </Link>
       <Link href={`/album/${nip}`} className="py-4 flex items-center gap-2 mb-9 ">
