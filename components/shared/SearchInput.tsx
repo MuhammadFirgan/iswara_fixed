@@ -1,42 +1,54 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { Search } from "lucide-react";
 
 export default function SearchInput() {
-  const [query, setQuery] = useState(""); 
-  const router = useRouter(); 
-  const searchParams = useSearchParams(); 
-
+  const router = useRouter();
+  const searchParams = useSearchParams();
   
+  // Ambil nilai query dari URL saat ini
+  const urlQuery = searchParams.get("query") || "";
+  
+  // Sinkronisasi state dengan URL (hanya saat URL berubah)
+  const [query, setQuery] = useState(urlQuery);
+
+  // Update state jika URL berubah (misal: back/forward button)
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      let newUrl = "";
+    const current = searchParams.get("query") || "";
+    if (current !== query) {
+      setQuery(current);
+    }
+  }, [searchParams, query]);
 
-      if (query) {
-        
-        newUrl = formUrlQuery({
-          params: searchParams.toString(),
-          key: "query",
-          value: query,
-        });
-      } else {
-        
-        newUrl = removeKeysFromQuery({
-          params: searchParams.toString(),
-          keysToRemove: ["query"],
-        });
-      }
-
+  // Debounced update URL berdasarkan input
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const currentUrlQuery = searchParams.get("query") || "";
       
-      router.push(newUrl, { scroll: false });
-    }, 300); 
+      // Hanya push jika berbeda dari URL saat ini
+      if (query !== currentUrlQuery) {
+        let newUrl;
+        if (query) {
+          newUrl = formUrlQuery({
+            params: searchParams.toString(),
+            key: "query",
+            value: query,
+          });
+        } else {
+          newUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ["query"],
+          });
+        }
+        router.push(newUrl, { scroll: false });
+      }
+    }, 300);
 
-    return () => clearTimeout(delayDebounceFn); 
+    return () => clearTimeout(timeout);
   }, [query, searchParams, router]);
 
   return (
