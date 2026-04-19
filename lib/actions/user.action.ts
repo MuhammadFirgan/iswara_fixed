@@ -84,20 +84,7 @@ export async function getUserById(id: string) {
 
   const cacheKey = `author:${id}`
   try {
-    // await dbConnect()
-
-    // const cached = await redis.get(cacheKey)
-
-    // if(cached) JSON.parse(cached)
-
-    // const userById = await User.findOne({_id: id}).select('-password')
-
-    // if(userById) {
-    //   await redis.setex(cacheKey, TTL, JSON.stringify(userById))
-    // }
-
-    // return JSON.parse(JSON.stringify(userById))
-
+    
     return getCachedOrDB(cacheKey, async () => {
       await dbConnect()
       const userById = await User.findOne({_id: id}).select('-password')

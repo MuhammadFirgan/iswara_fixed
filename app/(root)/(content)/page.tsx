@@ -22,7 +22,7 @@ export default async function Page() {
         <h2 className="text-2xl font-bold">Dengarkan AI Bercerita</h2>
       </div>
       
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex min-w-full flex-col lg:flex-row gap-6 ">
         <AudioList initialData={audios} query={query}/>
       </div>
     </section>

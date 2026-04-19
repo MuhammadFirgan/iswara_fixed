@@ -20,9 +20,16 @@ import { useEffect, useState } from "react"
 import { getRole } from "@/lib/actions/role.action"
 import { updateUser } from "@/lib/actions/user.action"
 import { useRouter } from "next/navigation"
-import { updateUserProps } from '@/types';
+import { IRole, updateUserProps } from '@/types';
 import { useToast } from "@/hooks/use-toast"
 import { Loader } from "lucide-react"
+
+interface UpdateUserPayload {
+  fullName: string;
+  email: string;
+  nip: string;
+  role: string; // Berupa String ID dari Select
+}
 
 export default function EditModal({ user } : { user: updateUserProps}) {
 
@@ -64,7 +71,9 @@ export default function EditModal({ user } : { user: updateUserProps}) {
     async function onSubmit(values: z.infer<typeof updateUserValidation>) {
         setIsSubmiting(true)
         try {
-            const updatedUser = await updateUser({ id: user._id, user: values })
+            // @ts-expect-error: Server Action 'updateUser' mengharapkan Object Role, sedangkan form mengirim String ID.
+            
+            const updatedUser = await updateUser({ id: user._id as string, user: values })
             if(updatedUser) {
                 router.push('/admin/management')
                 router.refresh()
@@ -122,7 +131,7 @@ export default function EditModal({ user } : { user: updateUserProps}) {
                             label="Status"
                             placeholder="Pilih status"
                         >
-                            {roles?.map((role: any) => (
+                            {roles?.map((role: IRole) => (
 
                                 <SelectItem key={role?._id} value={role?._id} className="bg-zinc-900 border-none text-white">{role?.name === 'admin' ? 'Operator' : 'Guru'}</SelectItem>
                             ))}

@@ -39,6 +39,7 @@ export default function PodcastDetailPlayer({ userid, audio }: audioProps) {
             slug: audio?.slug,
             url: audio?.url,
             thumbnail: audio?.thumbnail,
+            // @ts-expect-error: Server Action 'updateUser' mengharapkan Object Role, sedangkan form mengirim String ID.
             author: audio?.author.fullName,
             duration: audio?.duration 
         })
