@@ -1,19 +1,9 @@
 
 import EditModal from "@/components/shared/EditModal"
 import { Badge } from "@/components/ui/badge"
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
+
 import { getToken } from "@/constans/getToken"
 import { getAllUser, getUserById } from "@/lib/actions/user.action"
-import { dbConnect } from "@/lib/database"
-import User from "@/lib/database/models/user.model"
 import { updateUserProps } from "@/types"
 import Image from "next/image"
 

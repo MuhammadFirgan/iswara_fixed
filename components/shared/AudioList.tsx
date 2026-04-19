@@ -2,8 +2,9 @@
 import { getAudios } from '@/lib/actions/audio.action'
 import { useEffect, useRef, useState } from 'react'
 import Card from './Card'
+import { AudioProps } from '@/types'
 
-export default function AudioList({ initialData, query }: { initialData: any[], query?: string }) {
+export default function AudioList({ initialData, query }: { initialData: AudioProps[], query?: string }) {
     const [audios, setAudios] = useState(initialData)
     const [ page, setPage ] = useState(1)
     const [loading, setLoading] = useState(false)
@@ -44,15 +45,15 @@ export default function AudioList({ initialData, query }: { initialData: any[], 
 
   return (
     <div className='w-full'>
-        <div className="flex justify-center gap-4 sm:gap-5 flex-wrap pt-10 lg:min-h-screen ">
+        <div className="flex justify-center gap-4 sm:gap-5 flex-wrap pt-10 lg:min-h-screen min-w-full">
             {audios && audios.length > 0 ? (
-                audios.map((audio: any, i: number)  => (
+                audios.map((audio)  => (
                 <Card 
-                    key={i} 
+                    key={audio._id} 
                     image={audio.thumbnail && audio.thumbnail.trim() !== '' ? audio.thumbnail : '/profile.jpg'} 
                     title={audio.title} 
                     name={audio.author.fullName} 
-                    profile={audio.author.photo} 
+                    profile={audio.author.photo || '/profile.jpg'} 
                     slug={audio.slug} 
                     nip={audio.author.nip} />
                 ))
