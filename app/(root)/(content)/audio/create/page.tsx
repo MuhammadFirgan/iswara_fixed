@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import AudioForm from "@/components/shared/AudioForm";
 import { getToken } from "@/constans/getToken";
 
