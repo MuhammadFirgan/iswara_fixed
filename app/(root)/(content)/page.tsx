@@ -1,7 +1,6 @@
+export const dynamic = 'force-dynamic';
+
 import AudioList from "@/components/shared/AudioList";
-import Card from "@/components/shared/Card";
-import { CustomSkeleton } from "@/components/shared/CustomSkeleton";
-import Trending from "@/components/shared/Trending";
 import { getAudios } from "@/lib/actions/audio.action";
 import { Sparkles } from "lucide-react";
 
